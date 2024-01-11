@@ -1,0 +1,108 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { NewsService } from './news.service';
+import { CreateNewsDto, EditNewsDto } from './dtos';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FILE_LIMIT } from '../constants/file-limits.constants';
+import { extname } from 'path';
+import { ValidationException } from '../exceptions';
+import { ParseObjectIdPipe } from '../pipes';
+import { ObjectId } from 'mongoose';
+import { AdminGuard } from '../auth/guards';
+
+@ApiTags('Новости')
+@Controller('news')
+export class NewsController {
+  constructor(private newsService: NewsService) {
+  }
+
+  @ApiOperation({ summary: 'Получение всех новостей, отсортированных по дате, более новые первее' })
+  @Get('getAll')
+  async getAllNews() {
+    return this.newsService.getAllNews();
+  }
+
+  @ApiOperation({ summary: 'Получение новости по slug или id' })
+  @ApiQuery({
+    name: 'slug',
+    required: false,
+    description: 'Для поиска по Slug'
+  })
+  @ApiQuery({
+    name: 'id',
+    required: false,
+    description: 'Для поиска по ID'
+  })
+  @Get('getBy')
+  async getBy(@Query('slug') slug?: string, @Query('id', new ParseObjectIdPipe()) id?: ObjectId) {
+    return this.newsService.getBy(slug, id);
+  }
+
+  @ApiOperation({ summary: 'Добавление новости' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image', {
+    limits: {
+      fieldSize: FILE_LIMIT.PHOTO_SIZE,
+    },
+    fileFilter: (req, file, callback) => {
+      if (file.mimetype.startsWith('image/') && /\.(png|jpeg|jpg)$/.test(extname(file.originalname).toLowerCase())) {
+        callback(null, true);
+      } else {
+        callback(new ValidationException('Only image files with extensions .png, .jpeg, and .jpg are allowed.'), false);
+      }
+    },
+  }))
+  @Post('create')
+  async create(@Body() createDto: CreateNewsDto, @UploadedFile() image: Express.Multer.File) {
+    return this.newsService.create(createDto, image);
+  }
+
+  @ApiOperation({ summary: 'Изменение новости' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image', {
+    limits: {
+      fieldSize: FILE_LIMIT.PHOTO_SIZE,
+    },
+    fileFilter: (req, file, callback) => {
+      if (file.mimetype.startsWith('image/') && /\.(png|jpeg|jpg)$/.test(extname(file.originalname).toLowerCase())) {
+        callback(null, true);
+      } else {
+        callback(new ValidationException('Only image files with extensions .png, .jpeg, and .jpg are allowed.'), false);
+      }
+    },
+  }))
+  @Put('edit')
+  async edit(@Body() editDto: EditNewsDto, @UploadedFile() image: Express.Multer.File) {
+    return this.newsService.edit(editDto, image);
+  }
+
+  @ApiOperation({ summary: 'Удаление новости' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID новости',
+  })
+  @Delete('delete')
+  async deleteById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.newsService.deleteById(id);
+  }
+}
