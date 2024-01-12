@@ -18,7 +18,7 @@ import { CreateVideoDto, EditVideoDto } from './dtos';
 import { ValidationException } from '../exceptions';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
-import { FILE_LIMIT } from '../constants/file-limits.constants';
+import { FILE_LIMIT } from '../constants';
 import { AdminGuard } from '../auth/guards';
 
 @ApiTags('Видео')

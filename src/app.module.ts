@@ -16,6 +16,7 @@ import { NewsModule } from './news/news.module';
 import { EventModule } from './event/event.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { GithubModule } from './github/github.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { UsersModule } from './users/users.module';
     EventModule,
     AuthModule,
     UsersModule,
+    GithubModule,
   ],
 })
 export class AppModule {
