@@ -11,16 +11,16 @@ export class GithubService {
   }
 
   getPull() {
-    exec('dir', (error, stdout, stderr) => {
+    exec('git pull', (error, stdout, stderr) => {
       if (error) {
-        console.error(`Ошибка выполнения команды: ${error.message}`);
+        console.error(`Can not pull: ${error.message}`);
         return;
       }
       if (stderr) {
-        console.error(`Ошибка выполнения команды: ${stderr}`);
+        console.error(`Can not pull: ${stderr}`);
         return;
       }
-      console.log(`Результат выполнения команды:\n${stdout}`);
+      console.log(`Pulled: \n${stdout}`);
     });
   }
 }
