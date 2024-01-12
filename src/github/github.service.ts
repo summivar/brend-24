@@ -20,7 +20,7 @@ export class GithubService {
         console.error(`Can not pull: ${stderr}`);
         return;
       }
-      console.log(`Pulled: \n${stdout}`);
+      console.log(`Pulled:\n${stdout}`);
     });
   }
 }

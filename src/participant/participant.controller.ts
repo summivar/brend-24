@@ -60,16 +60,16 @@ export class ParticipantController {
     return this.participantService.getAllParticipants(isPartner, pageSize, pageNumber);
   }
 
-  @ApiOperation({ summary: 'Получение участника по Name или ID' })
+  @ApiOperation({ summary: 'Получение участника по name или Id' })
   @ApiQuery({
     name: 'name',
     required: false,
-    description: 'Для поиска по Name',
+    description: 'Для поиска по name',
   })
   @ApiQuery({
     name: 'id',
     required: false,
-    description: 'Для поиска по ID',
+    description: 'Для поиска по Id',
   })
   @Get('getParticipantBy')
   async getParticipantBy(@Query('name') name?: string, @Query('id', new ParseObjectIdPipe({ isOptional: true })) id?: ObjectId) {
