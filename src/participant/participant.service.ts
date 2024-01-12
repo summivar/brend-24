@@ -37,11 +37,19 @@ export class ParticipantService {
     }
   }
 
-  async getAllParticipants(isPartner?: boolean) {
+  async getAllParticipants(isPartner?: boolean, pageSize?: number, pageNumber?: number) {
+    let query: any = {};
     if (isPartner !== undefined) {
-      return this.participantModel.find({ isPartner });
+      query = { isPartner: isPartner };
     }
-    return this.participantModel.find();
+    if (pageSize && pageNumber) {
+      const skip = pageSize * (pageNumber - 1);
+      return this.participantModel.find(query)
+        .skip(skip)
+        .limit(pageSize)
+        .exec();
+    }
+    return this.participantModel.find(query);
   }
 
   async create(dto: CreateParticipantDto, logo: Express.Multer.File) {

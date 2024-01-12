@@ -5,10 +5,12 @@ import {
   Get,
   Param,
   ParseBoolPipe,
+  ParseIntPipe,
   Post,
   Put,
   Query,
-  UploadedFile, UseGuards,
+  UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -17,7 +19,7 @@ import { CreateParticipantDto, EditParticipantDto } from './dtos';
 import { ParseObjectIdPipe } from '../pipes';
 import { ObjectId } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FILE_LIMIT } from '../constants/file-limits.constants';
+import { FILE_LIMIT } from '../constants';
 import { extname } from 'path';
 import { ValidationException } from '../exceptions';
 import { AdminGuard } from '../auth/guards';
@@ -32,11 +34,30 @@ export class ParticipantController {
   @ApiQuery({
     name: 'isPartner',
     required: false,
-    description: 'Если true, придут все партнеры. Если false, придут все не партнеры. Если не объявленно - придут все',
+    description:
+      'Если true, придут все партнеры. Если false, придут все не партнеры. Если не объявленно - придут все.',
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    description:
+      'Размер страницы. Выдаёт столько участников, сколько указано здесь, либо же столько, сколько осталось. ' +
+      'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
+  })
+  @ApiQuery({
+    name: 'pageNumber',
+    required: false,
+    description:
+      'Номер страницы. Страницы начинаются с 1. ' +
+      'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
   })
   @Get('getAllParticipants')
-  async getAllParticipants(@Query('isPartner', new ParseBoolPipe({ optional: true })) isPartner?: boolean) {
-    return this.participantService.getAllParticipants(isPartner);
+  async getAllParticipants(
+    @Query('isPartner', new ParseBoolPipe({ optional: true })) isPartner?: boolean,
+    @Query('pageSize', new ParseIntPipe({ optional: true })) pageSize?: number,
+    @Query('pageNumber', new ParseIntPipe({ optional: true })) pageNumber?: number,
+  ) {
+    return this.participantService.getAllParticipants(isPartner, pageSize, pageNumber);
   }
 
   @ApiOperation({ summary: 'Получение участника по Name или ID' })
