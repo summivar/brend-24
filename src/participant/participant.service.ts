@@ -44,12 +44,20 @@ export class ParticipantService {
     }
     if (pageSize && pageNumber) {
       const skip = pageSize * (pageNumber - 1);
-      return this.participantModel.find(query)
+      const totalParticipants = await this.participantModel.countDocuments(query);
+      const paginatedParticipants = await this.participantModel.find(query)
         .skip(skip)
         .limit(pageSize)
         .exec();
+
+      return {
+        totalParticipants: totalParticipants,
+        participants: paginatedParticipants,
+      };
     }
-    return this.participantModel.find(query);
+    return {
+      participants: await this.participantModel.find(query),
+    };
   }
 
   async create(dto: CreateParticipantDto, logo: Express.Multer.File) {
