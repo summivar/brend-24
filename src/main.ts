@@ -11,6 +11,8 @@ async function start() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
 
+  app.setGlobalPrefix('api');
+
   const PORT = configService.get<number>('port', 7777);
   const swaggerTheme = configService.get<string>('swaggerTheme', 'dark');
 
@@ -37,7 +39,6 @@ async function start() {
   };
   SwaggerModule.setup('api/docs', app, document, options);
 
-  // app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
   app.use(cookieParser(configService.get<string>('COOKIE_SECRET')));
