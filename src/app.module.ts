@@ -17,6 +17,7 @@ import { EventModule } from './event/event.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GithubModule } from './github/github.module';
+import { FakerModule } from './faker/faker.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { GithubModule } from './github/github.module';
     AuthModule,
     UsersModule,
     GithubModule,
+    FakerModule,
   ],
 })
 export class AppModule {
