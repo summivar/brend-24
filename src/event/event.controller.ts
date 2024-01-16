@@ -41,9 +41,15 @@ export class EventController {
   @ApiOperation({ summary: 'Изменение мероприятия' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminGuard)
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID мероприятия',
+  })
   @Put('edit')
-  async edit(@Body() editDto: EditEventDto) {
-    return this.eventService.edit(editDto);
+  async edit(@Body() editDto: EditEventDto, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.eventService.edit(editDto, id);
   }
 
   @ApiOperation({ summary: 'Удаление всех мероприятий' })

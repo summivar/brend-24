@@ -32,8 +32,8 @@ export class PhotoService {
     });
   }
 
-  async edit(dto: EditPhotoDto, image: Express.Multer.File) {
-    const photo = await this.photoModel.findById(dto.id);
+  async edit(dto: EditPhotoDto, image: Express.Multer.File, id: ObjectId) {
+    const photo = await this.photoModel.findById(id);
 
     if (!photo) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);

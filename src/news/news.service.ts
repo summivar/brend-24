@@ -67,8 +67,8 @@ export class NewsService {
     });
   }
 
-  async edit(dto: EditNewsDto, image: Express.Multer.File) {
-    const news = await this.newsModel.findById(dto.id);
+  async edit(dto: EditNewsDto, image: Express.Multer.File, id: ObjectId) {
+    const news = await this.newsModel.findById(id);
 
     if (!news) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);

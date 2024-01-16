@@ -32,8 +32,8 @@ export class VideoService {
     });
   }
 
-  async edit(dto: EditVideoDto, videoFile: Express.Multer.File) {
-    const video = await this.videoModel.findById(dto.id);
+  async edit(dto: EditVideoDto, videoFile: Express.Multer.File, id: ObjectId) {
+    const video = await this.videoModel.findById(id);
 
     if (!video) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);

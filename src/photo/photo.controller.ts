@@ -70,9 +70,15 @@ export class PhotoController {
       }
     }
   }))
-  @Put('edit')
-  async edit(@Body() editDto: EditPhotoDto, @UploadedFile() image: Express.Multer.File) {
-    return this.photoService.edit(editDto, image);
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID фото',
+  })
+  @Put('edit/:id')
+  async edit(@Body() editDto: EditPhotoDto, @UploadedFile() image: Express.Multer.File, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.photoService.edit(editDto, image, id);
   }
 
   @ApiOperation({summary: 'Удаление фото по ID'})

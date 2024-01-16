@@ -33,8 +33,8 @@ export class EventService {
     });
   }
 
-  async edit(dto: EditEventDto) {
-    const event = await this.eventModel.findOne(dto.id);
+  async edit(dto: EditEventDto, id: ObjectId) {
+    const event = await this.eventModel.findOne(id);
     if (!event) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }

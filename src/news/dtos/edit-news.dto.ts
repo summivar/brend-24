@@ -4,10 +4,6 @@ import { ObjectId } from 'mongoose';
 import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class EditNewsDto {
-  @ApiProperty({example: 'ObjectID', description: 'ObjectID новости'})
-  @IsObjectId()
-  id: ObjectId;
-
   @ApiProperty({example: 'Name', description: 'Имя новости'})
   @IsString()
   @IsOptional()

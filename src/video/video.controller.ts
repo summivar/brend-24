@@ -70,9 +70,15 @@ export class VideoController {
       }
     }
   }))
-  @Put('edit')
-  async edit(@Body() editDto: EditVideoDto, @UploadedFile() video: Express.Multer.File) {
-    return this.videoService.edit(editDto, video);
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID видео',
+  })
+  @Put('edit/:id')
+  async edit(@Body() editDto: EditVideoDto, @UploadedFile() video: Express.Multer.File, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.videoService.edit(editDto, video, id);
   }
 
   @ApiOperation({summary: 'Удаление видео по ID'})

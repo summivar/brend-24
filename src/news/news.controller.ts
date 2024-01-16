@@ -87,9 +87,15 @@ export class NewsController {
       }
     },
   }))
-  @Put('edit')
-  async edit(@Body() editDto: EditNewsDto, @UploadedFile() image: Express.Multer.File) {
-    return this.newsService.edit(editDto, image);
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID новости',
+  })
+  @Put('edit/:id')
+  async edit(@Body() editDto: EditNewsDto, @UploadedFile() image: Express.Multer.File, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.newsService.edit(editDto, image, id);
   }
 
   @ApiOperation({ summary: 'Удаление новости' })

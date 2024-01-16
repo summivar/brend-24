@@ -77,8 +77,8 @@ export class ParticipantService {
     });
   }
 
-  async edit(dto: EditParticipantDto, logo: Express.Multer.File) {
-    const participant = await this.participantModel.findById(dto.id);
+  async edit(dto: EditParticipantDto, logo: Express.Multer.File, id: ObjectId) {
+    const participant = await this.participantModel.findById(id);
     if (!participant) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }

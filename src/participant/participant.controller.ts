@@ -113,9 +113,15 @@ export class ParticipantController {
       }
     },
   }))
-  @Put('edit')
-  async edit(@Body() editDto: EditParticipantDto, @UploadedFile() logo: Express.Multer.File) {
-    return this.participantService.edit(editDto, logo);
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID участника',
+  })
+  @Put('edit/:id')
+  async edit(@Body() editDto: EditParticipantDto, @UploadedFile() logo: Express.Multer.File, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.participantService.edit(editDto, logo, id);
   }
 
   @ApiOperation({ summary: 'Удаление всех участников' })

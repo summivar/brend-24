@@ -4,10 +4,6 @@ import { ObjectId } from 'mongoose';
 import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class EditParticipantDto {
-  @ApiProperty({example: 'id', description: 'ID бренда'})
-  @IsObjectId({message: 'Cannot transform string to ObjectID'})
-  id: ObjectId;
-
   @ApiProperty({example: 'Tutu', description: 'Имя бренда'})
   @IsString()
   @IsOptional()
