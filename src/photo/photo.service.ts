@@ -14,13 +14,29 @@ export class PhotoService {
   ) {
   }
 
-  async getAll() {
-    return this.photoModel.find();
+  async getAll(pageSize?: number, pageNumber?: number) {
+    if (pageSize && pageNumber) {
+      const skip = pageSize * (pageNumber - 1);
+      const totalPhotos = await this.photoModel.countDocuments({});
+      const paginatedPhotos = await this.photoModel.find({})
+        .skip(skip)
+        .limit(pageSize)
+        .exec();
+
+      return {
+        totalPhotos: totalPhotos,
+        photos: paginatedPhotos,
+      };
+    }
+    return {
+      photos: await this.photoModel.find({}),
+    };
   }
 
   async add(dto: CreatePhotoDto, image: Express.Multer.File) {
     const photoPath = this.fileService.saveFile(image);
     const photo = new this.photoModel({
+      photoTime: dto.photoTime,
       photoPath: photoPath,
       photoCaption: dto.photoCaption,
     });
@@ -37,6 +53,10 @@ export class PhotoService {
 
     if (!photo) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
+    }
+
+    if (dto.photoTime) {
+      photo.photoTime = dto.photoTime;
     }
 
     if (dto.photoCaption) {

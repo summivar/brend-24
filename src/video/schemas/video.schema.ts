@@ -8,6 +8,9 @@ export type VideoDocument = Video & Document;
 })
 export class Video {
   @Prop({ required: true })
+  videoTime: Date;
+
+  @Prop({ required: true })
   videoPath: string;
 
   @Prop({ required: true })

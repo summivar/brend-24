@@ -8,6 +8,9 @@ export type PhotoDocument = Photo & Document;
 })
 export class Photo {
   @Prop({ required: true })
+  photoTime: Date
+
+  @Prop({ required: true })
   photoPath: string;
 
   @Prop({ required: true })

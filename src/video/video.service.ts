@@ -14,16 +14,32 @@ export class VideoService {
   ) {
   }
 
-  async getAll() {
-    return this.videoModel.find();
+  async getAll(pageSize: number, pageNumber: number) {
+    if (pageSize && pageNumber) {
+      const skip = pageSize * (pageNumber - 1);
+      const totalVideos = await this.videoModel.countDocuments({});
+      const paginatedVideos = await this.videoModel.find({})
+        .skip(skip)
+        .limit(pageSize)
+        .exec();
+
+      return {
+        totalVideo: totalVideos,
+        videos: paginatedVideos,
+      };
+    }
+    return {
+      videos: await this.videoModel.find({}),
+    };
   }
 
   async add(dto: CreateVideoDto, image: Express.Multer.File) {
     const videoPath = this.fileService.saveFile(image);
     const video = new this.videoModel({
+      videoTime: dto.videoTime,
       videoCaption: dto.videoCaption,
-      videoPath: videoPath
-    })
+      videoPath: videoPath,
+    });
 
     return video.save().catch((e) => {
       if (e.toString().includes('E11000')) {
@@ -37,6 +53,10 @@ export class VideoService {
 
     if (!video) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
+    }
+
+    if (dto.videoTime) {
+      video.videoTime = dto.videoTime;
     }
 
     if (dto.videoCaption) {
