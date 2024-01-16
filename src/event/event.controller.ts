@@ -47,7 +47,7 @@ export class EventController {
     example: 'ObjectID',
     description: 'ID мероприятия',
   })
-  @Put('edit')
+  @Put('edit/:id')
   async edit(@Body() editDto: EditEventDto, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
     return this.eventService.edit(editDto, id);
   }
