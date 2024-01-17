@@ -19,6 +19,7 @@ import { DistrictModule } from '../district/district.module';
   ],
   providers: [ParticipantService],
   controllers: [ParticipantController],
+  exports: [ParticipantService],
 })
 export class ParticipantModule {
 }

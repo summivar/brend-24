@@ -16,6 +16,7 @@ import { News, NewsSchema } from './schemas';
     CommonModule
   ],
   controllers: [NewsController],
-  providers: [NewsService]
+  providers: [NewsService],
+  exports: [NewsService],
 })
 export class NewsModule {}
