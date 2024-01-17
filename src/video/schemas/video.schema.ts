@@ -11,7 +11,7 @@ export class Video {
   videoTime: Date;
 
   @Prop({ required: true })
-  videoPath: string;
+  videoLink: string;
 
   @Prop({ required: true })
   videoCaption: string;

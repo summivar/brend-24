@@ -13,11 +13,7 @@ export class CreateVideoDto {
   @IsString()
   videoCaption: string;
 
-  @ApiProperty({
-    type: 'string',
-    format: 'binary',
-    description: 'Видео',
-    required: true,
-  })
-  video: Express.Multer.File;
+  @ApiProperty({ example: 'https://youtu.be/dQw4w9WgXcQ?si=nBoSYq7ZWQoFwFVL', description: 'Ссылка на видео', required: true })
+  @IsString()
+  videoLink: string;
 }

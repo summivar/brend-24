@@ -10,7 +10,6 @@ import { FileSystemService } from '../common/file-system/file-system.service';
 export class VideoService {
   constructor(
     @InjectModel(Video.name) private videoModel: Model<Video>,
-    private fileService: FileSystemService,
   ) {
   }
 
@@ -42,22 +41,7 @@ export class VideoService {
     };
   }
 
-  async add(dto: CreateVideoDto, image: Express.Multer.File) {
-    const videoPath = this.fileService.saveFile(image);
-    const video = new this.videoModel({
-      videoTime: dto.videoTime,
-      videoCaption: dto.videoCaption,
-      videoPath: videoPath,
-    });
-
-    return video.save().catch((e) => {
-      if (e.toString().includes('E11000')) {
-        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
-      }
-    });
-  }
-
-  async edit(dto: EditVideoDto, videoFile: Express.Multer.File, id: ObjectId) {
+  async edit(dto: EditVideoDto, id: ObjectId) {
     const video = await this.videoModel.findById(id);
 
     if (!video) {
@@ -72,34 +56,32 @@ export class VideoService {
       video.videoCaption = dto.videoCaption;
     }
 
-    if (videoFile) {
-      const newVideoPath = this.fileService.saveFile(videoFile);
-      this.fileService.deleteFile(video.videoPath);
-      video.videoPath = newVideoPath;
+    if (dto.videoLink) {
+      video.videoLink = dto.videoLink;
     }
 
     return video.save();
   }
 
+  async add(dto: CreateVideoDto) {
+    const video = new this.videoModel({
+      videoTime: dto.videoTime,
+      videoCaption: dto.videoCaption,
+      videoPath: dto.videoLink
+    });
+
+    return video.save().catch((e) => {
+      if (e.toString().includes('E11000')) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
+      }
+    });
+  }
+
   async deleteById(id: ObjectId) {
-    const video = await this.videoModel.findById(id);
-    if (!video) {
-      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
-    }
-    this.fileService.deleteFile(video.videoPath);
     return this.videoModel.deleteOne(id);
   }
 
   async deleteAll() {
-    const videos = await this.videoModel.find();
-    if (!videos) {
-      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
-    }
-
-    for (const video of videos) {
-      this.fileService.deleteFile(video.videoPath);
-    }
-
     return this.videoModel.deleteMany();
   }
 }

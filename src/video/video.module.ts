@@ -13,7 +13,6 @@ import { CommonModule } from '../common/common.module';
         schema: VideoSchema,
       },
     ]),
-    CommonModule
   ],
   controllers: [VideoController],
   providers: [VideoService],
