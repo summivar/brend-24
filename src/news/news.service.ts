@@ -67,22 +67,6 @@ export class NewsService {
     });
   }
 
-  async fakeCreate(dto: CreateNewsDto, photoPath: string) {
-    const news = new this.newsModel({
-      name: dto.name,
-      slug: dto.slug,
-      photoPath: photoPath,
-      photoCaption: dto.photoCaption,
-      newsText: dto.newsText,
-    });
-
-    return news.save().catch((e) => {
-      if (e.toString().includes('E11000')) {
-        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
-      }
-    });
-  }
-
   async edit(dto: EditNewsDto, image: Express.Multer.File, id: ObjectId) {
     const news = await this.newsModel.findById(id);
 
