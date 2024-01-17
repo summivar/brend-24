@@ -4,6 +4,7 @@ import { ParticipantController } from './participant.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Participant, ParticipantSchema } from './schemas';
 import { CommonModule } from '../common/common.module';
+import { DistrictModule } from '../district/district.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { CommonModule } from '../common/common.module';
         schema: ParticipantSchema,
       },
     ]),
-    CommonModule
+    CommonModule,
+    DistrictModule
   ],
   providers: [ParticipantService],
   controllers: [ParticipantController],

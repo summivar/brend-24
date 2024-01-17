@@ -5,11 +5,13 @@ import { Model, ObjectId } from 'mongoose';
 import { EXCEPTION_MESSAGE } from '../constants';
 import { CreateParticipantDto, EditParticipantDto } from './dtos';
 import { FileSystemService } from '../common/file-system/file-system.service';
+import { DistrictService } from '../district/district.service';
 
 @Injectable()
 export class ParticipantService {
   constructor(
     @InjectModel(Participant.name) private participantModel: Model<Participant>,
+    private districtService: DistrictService,
     private fileService: FileSystemService,
   ) {
   }
@@ -58,19 +60,25 @@ export class ParticipantService {
 
   async create(dto: CreateParticipantDto, logo: Express.Multer.File) {
     const logoPath = this.fileService.saveFile(logo);
-    const participant = new this.participantModel({
+    const district = await this.districtService.getOrCreateDistrict(dto.district);
+    const newParticipant = new this.participantModel({
       nameOfBrand: dto.nameOfBrand,
       nameOfCompany: dto.nameOfCompany,
       address: dto.address,
-      district: dto.district,
+      district: district._id,
       definition: dto.description,
       logoPath: logoPath,
     });
-    return participant.save().catch((e) => {
+    const participant = await newParticipant.save().catch(async (e) => {
       if (e.toString().includes('E11000')) {
+        await this.districtService.deleteDistrictById(district._id);
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
       }
     });
+    if (participant) {
+      await this.districtService.updateParticipantInDistrict(participant._id, district._id, dto.district);
+    }
+    return participant;
   }
 
   async edit(dto: EditParticipantDto, logo: Express.Multer.File, id: ObjectId) {
@@ -92,7 +100,13 @@ export class ParticipantService {
     }
 
     if (dto.district) {
-      participant.district = dto.district;
+      const district = await this.districtService.updateParticipantInDistrict(
+        participant._id,
+        participant.district,
+        dto.district,
+      );
+
+      participant.district = district._id;
     }
 
     if (dto.description) {
@@ -128,6 +142,8 @@ export class ParticipantService {
     }
 
     this.fileService.deleteFile(participant.logoPath);
+
+
     return this.participantModel.deleteOne(id);
   }
 }

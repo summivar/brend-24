@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { join } from 'path';
 import configuration from './config/configuration';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { CommonModule } from './common/common.module';
 import { PrivacyModule } from './privacy/privacy.module';
-import { join } from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { AgreementModule } from './agreement/agreement.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { AboutModule } from './about/about.module';
@@ -18,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GithubModule } from './github/github.module';
 import { PartnerModule } from './partner/partner.module';
+import { DistrictModule } from './district/district.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { PartnerModule } from './partner/partner.module';
     UsersModule,
     GithubModule,
     PartnerModule,
+    DistrictModule,
   ],
 })
 export class AppModule {

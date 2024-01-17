@@ -4,7 +4,6 @@ import { Model, ObjectId } from 'mongoose';
 import { Video } from './schemas';
 import { CreateVideoDto, EditVideoDto } from './dtos';
 import { EXCEPTION_MESSAGE } from '../constants';
-import { FileSystemService } from '../common/file-system/file-system.service';
 
 @Injectable()
 export class VideoService {
