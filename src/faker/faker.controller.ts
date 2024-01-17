@@ -34,16 +34,16 @@ export class FakerController {
     return this.fakerService.createFakeNews(fakeCount);
   }
 
-  @ApiOperation({summary: 'Создание фейковых участников'})
-  @ApiQuery({
-    name: 'fakeCount',
-    required: false,
-    description: 'Количество, сколько нужно создать. Должно быть >= 1. По дефолту = 10'
-  })
-  @Post('createFakeParticipants')
-  async createFakeParticipants(
-    @Query('fakeCount', new ParseIntPipe({optional: true})) fakeCount?: number
-  ) {
-    return this.fakerService.createFakeParticipants(fakeCount);
-  }
+  // @ApiOperation({summary: 'Создание фейковых участников'})
+  // @ApiQuery({
+  //   name: 'fakeCount',
+  //   required: false,
+  //   description: 'Количество, сколько нужно создать. Должно быть >= 1. По дефолту = 10'
+  // })
+  // @Post('createFakeParticipants')
+  // async createFakeParticipants(
+  //   @Query('fakeCount', new ParseIntPipe({optional: true})) fakeCount?: number
+  // ) {
+  //   return this.fakerService.createFakeParticipants(fakeCount);
+  // }
 }

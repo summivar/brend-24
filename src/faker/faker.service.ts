@@ -65,35 +65,6 @@ export class FakerService {
     return result;
   }
 
-  async createFakeParticipants(fakeCount: number = 10) {
-    if (!Number.isInteger(fakeCount) && fakeCount >= 1) {
-      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
-    }
-
-    const result = [];
-    for (let i = 0; i < fakeCount; i++) {
-      const nameOfBrand: string = faker.lorem.words({min: 2, max: 4});
-      const nameOfCompany: string = faker.lorem.words({min: 2, max: 4});
-      const address: string = faker.location.streetAddress();
-      const definition: string = faker.lorem.sentences({min: 2, max: 5});
-      const isPartner: boolean = faker.datatype.boolean();
-      const logoPath: string = await this.generateImage();
-
-      const participant = await this.participantService.fakeCreate({
-        nameOfBrand: nameOfBrand,
-        nameOfCompany: nameOfCompany,
-        address: address,
-        definition: definition,
-        isPartner: isPartner,
-        logo: undefined
-      }, logoPath);
-
-      result.push(participant);
-    }
-
-    return result;
-  }
-
   private async generateImage(): Promise<string> {
     const response = await axios.get(faker.image.urlLoremFlickr(), {responseType: 'arraybuffer'});
     const buffer = Buffer.from(response.data, 'binary');
