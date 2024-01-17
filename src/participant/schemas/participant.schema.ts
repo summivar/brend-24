@@ -17,10 +17,10 @@ export class Participant {
   address: string;
 
   @Prop({ required: true })
-  definition: string;
+  district: string;
 
   @Prop({ required: true })
-  isPartner: boolean;
+  description: string;
 
   @Prop({ required: true })
   logoPath: string;

@@ -13,28 +13,28 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ParticipantService } from './participant.service';
-import { CreateParticipantDto, EditParticipantDto } from './dtos';
+import { PartnerService } from './partner.service';
 import { ParseObjectIdPipe } from '../pipes';
 import { ObjectId } from 'mongoose';
+import { CreatePartnerDto, EditPartnerDto } from './dtos';
+import { AdminGuard } from '../auth/guards';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FILE_LIMIT } from '../constants';
 import { extname } from 'path';
 import { ValidationException } from '../exceptions';
-import { AdminGuard } from '../auth/guards';
 
-@ApiTags('Участники')
-@Controller('participant')
-export class ParticipantController {
-  constructor(private participantService: ParticipantService) {
+@ApiTags('Партнеры')
+@Controller('partner')
+export class PartnerController {
+  constructor(private partnerService: PartnerService) {
   }
 
-  @ApiOperation({ summary: 'Получение всех участников' })
+  @ApiOperation({ summary: 'Получение всех партнеров' })
   @ApiQuery({
     name: 'pageSize',
     required: false,
     description:
-      'Размер страницы. Выдаёт столько участников, сколько указано здесь, либо же столько, сколько осталось. ' +
+      'Размер страницы. Выдаёт столько партнеров, сколько указано здесь, либо же столько, сколько осталось. ' +
       'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
   })
   @ApiQuery({
@@ -44,31 +44,26 @@ export class ParticipantController {
       'Номер страницы. Страницы начинаются с 1. ' +
       'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
   })
-  @Get('getAllParticipants')
-  async getAllParticipants(
+  @Get('getAll')
+  async getAll(
     @Query('pageSize', new ParseIntPipe({ optional: true })) pageSize?: number,
     @Query('pageNumber', new ParseIntPipe({ optional: true })) pageNumber?: number,
   ) {
-    return this.participantService.getAllParticipants(pageSize, pageNumber);
+    return this.partnerService.getAll(pageSize, pageNumber);
   }
 
-  @ApiOperation({ summary: 'Получение участника по name или Id' })
-  @ApiQuery({
-    name: 'name',
-    required: false,
-    description: 'Для поиска по name',
-  })
-  @ApiQuery({
+  @ApiOperation({ summary: 'Получение партнера по id' })
+  @ApiParam({
     name: 'id',
-    required: false,
+    required: true,
     description: 'Для поиска по Id',
   })
-  @Get('getParticipantBy')
-  async getParticipantBy(@Query('name') name?: string, @Query('id', new ParseObjectIdPipe({ isOptional: true })) id?: ObjectId) {
-    return this.participantService.getParticipantBy(name, id);
+  @Get('get/:id')
+  async getById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.partnerService.getById(id);
   }
 
-  @ApiOperation({ summary: 'Добавление участника' })
+  @ApiOperation({ summary: 'Создание нового партнера' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminGuard)
   @ApiConsumes('multipart/form-data')
@@ -85,11 +80,11 @@ export class ParticipantController {
     },
   }))
   @Post('create')
-  async create(@Body() createDto: CreateParticipantDto, @UploadedFile() logo: Express.Multer.File) {
-    return this.participantService.create(createDto, logo);
+  async create(@Body() createDto: CreatePartnerDto, @UploadedFile() logo: Express.Multer.File) {
+    return this.partnerService.create(createDto, logo);
   }
 
-  @ApiOperation({ summary: 'Изменение участника' })
+  @ApiOperation({ summary: 'Изменение партнера' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminGuard)
   @ApiConsumes('multipart/form-data')
@@ -109,32 +104,32 @@ export class ParticipantController {
     name: 'id',
     required: true,
     example: 'ObjectID',
-    description: 'ID участника',
+    description: 'ID парнетра',
   })
   @Put('edit/:id')
-  async edit(@Body() editDto: EditParticipantDto, @UploadedFile() logo: Express.Multer.File, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
-    return this.participantService.edit(editDto, logo, id);
+  async edit(@Body() editDto: EditPartnerDto, @UploadedFile() logo: Express.Multer.File, @Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.partnerService.edit(editDto, logo, id);
   }
 
-  @ApiOperation({ summary: 'Удаление всех участников' })
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(AdminGuard)
-  @Delete('deleteAll')
-  async deleteAllParticipants() {
-    return this.participantService.deleteAllParticipants();
-  }
-
-  @ApiOperation({ summary: 'Удаление участника по ID' })
+  @ApiOperation({ summary: 'Удаление партнера по ID' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminGuard)
   @ApiParam({
     name: 'id',
     required: true,
     example: 'ObjectID',
-    description: 'ID участника',
+    description: 'ID партнера',
   })
   @Delete('delete/:id')
-  async deleteParticipantById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
-    return this.participantService.deleteParticipantById(id);
+  async deleteById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.partnerService.deleteById(id);
+  }
+
+  @ApiOperation({ summary: 'Удаление всех партнеров' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @Delete('deleteAll')
+  async deleteAll() {
+    return this.partnerService.deleteAll();
   }
 }

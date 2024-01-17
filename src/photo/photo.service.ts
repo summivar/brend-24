@@ -25,11 +25,20 @@ export class PhotoService {
 
       return {
         totalPhotos: totalPhotos,
-        photos: paginatedPhotos,
+        photos: paginatedPhotos.sort((a, b) => {
+          const dateA = new Date(a.photoTime).getTime();
+          const dateB = new Date(b.photoTime).getTime();
+          return dateB - dateA;
+        }),
       };
     }
+    const photos = await this.photoModel.find({});
     return {
-      photos: await this.photoModel.find({}),
+      photos: photos.sort((a, b) => {
+        const dateA = new Date(a.photoTime).getTime();
+        const dateB = new Date(b.photoTime).getTime();
+        return dateB - dateA;
+      }),
     };
   }
 

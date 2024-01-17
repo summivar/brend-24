@@ -1,39 +1,37 @@
-import { IsBoolean, IsBooleanString, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongoose';
-import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class EditParticipantDto {
-  @ApiProperty({example: 'Tutu', description: 'Имя бренда'})
+  @ApiProperty({ example: 'Tutu', description: 'Имя бренда' })
   @IsString()
   @IsOptional()
   nameOfBrand: string;
 
-  @ApiProperty({example: 'TutuCompany', description: 'Имя компании'})
+  @ApiProperty({ example: 'TutuCompany', description: 'Имя компании' })
   @IsString()
   @IsOptional()
   nameOfCompany: string;
 
-  @ApiProperty({example: 'State, region...', description: 'Адрес участника'})
+  @ApiProperty({ example: 'State, region...', description: 'Адрес участника' })
   @IsString()
   @IsOptional()
   address: string;
 
-  @ApiProperty({example: 'Some text..', description: 'Описание участника'})
+  @ApiProperty({ example: 'Sovetskiy', description: 'Район участника' })
   @IsString()
   @IsOptional()
-  definition: string;
+  district: string;
 
-  @ApiProperty({description: 'Является ли участник партнёром?'})
-  @IsBooleanString()
+  @ApiProperty({ example: 'Some text..', description: 'Описание участника' })
+  @IsString()
   @IsOptional()
-  isPartner: boolean;
+  description: string;
 
   @ApiProperty({
     type: 'string',
     format: 'binary',
     description: 'Лого участника',
-    required: true,
+    required: false,
   })
   logo: Express.Multer.File;
 }

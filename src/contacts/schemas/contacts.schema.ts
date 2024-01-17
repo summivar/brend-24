@@ -21,9 +21,6 @@ export class Contacts {
 
   @Prop({ required: true })
   whatsappLink: string;
-
-  @Prop({ required: true })
-  telegramLink: string;
 }
 
 export const ContactsSchema = SchemaFactory.createForClass(Contacts);

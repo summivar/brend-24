@@ -37,15 +37,11 @@ export class ParticipantService {
     }
   }
 
-  async getAllParticipants(isPartner?: boolean, pageSize?: number, pageNumber?: number) {
-    let query: any = {};
-    if (isPartner !== undefined) {
-      query = { isPartner: isPartner };
-    }
+  async getAllParticipants(pageSize?: number, pageNumber?: number) {
     if (pageSize && pageNumber) {
       const skip = pageSize * (pageNumber - 1);
-      const totalParticipants = await this.participantModel.countDocuments(query);
-      const paginatedParticipants = await this.participantModel.find(query)
+      const totalParticipants = await this.participantModel.countDocuments();
+      const paginatedParticipants = await this.participantModel.find()
         .skip(skip)
         .limit(pageSize)
         .exec();
@@ -56,7 +52,7 @@ export class ParticipantService {
       };
     }
     return {
-      participants: await this.participantModel.find(query),
+      participants: await this.participantModel.find(),
     };
   }
 
@@ -66,8 +62,8 @@ export class ParticipantService {
       nameOfBrand: dto.nameOfBrand,
       nameOfCompany: dto.nameOfCompany,
       address: dto.address,
-      definition: dto.definition,
-      isPartner: dto.isPartner,
+      district: dto.district,
+      definition: dto.description,
       logoPath: logoPath,
     });
     return participant.save().catch((e) => {
@@ -95,12 +91,12 @@ export class ParticipantService {
       participant.address = dto.address;
     }
 
-    if (dto.definition) {
-      participant.definition = dto.definition;
+    if (dto.district) {
+      participant.district = dto.district;
     }
 
-    if (dto.isPartner) {
-      participant.isPartner = dto.isPartner;
+    if (dto.description) {
+      participant.description = dto.description;
     }
 
     if (logo) {

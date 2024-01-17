@@ -21,9 +21,4 @@ export class EditContactsDto {
   @IsString()
   @IsOptional()
   whatsappLink: string;
-
-  @ApiProperty({example: 'https://t.me/tutu', description: 'Ссылка на Telegram'})
-  @IsString()
-  @IsOptional()
-  telegramLink: string;
 }

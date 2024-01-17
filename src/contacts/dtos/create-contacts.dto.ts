@@ -17,8 +17,4 @@ export class CreateContactsDto {
   @ApiProperty({example: 'https://whatapp.com/tutu', description: 'Ссылка на WhatsApp'})
   @IsString()
   whatsappLink: string;
-
-  @ApiProperty({example: 'https://t.me/tutu', description: 'Ссылка на Telegram'})
-  @IsString()
-  telegramLink: string;
 }

@@ -1,26 +1,26 @@
-import { IsBoolean, IsBooleanString, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateParticipantDto {
-  @ApiProperty({example: 'Tutu', description: 'Имя бренда'})
+  @ApiProperty({ example: 'Tutu', description: 'Имя бренда' })
   @IsString()
   nameOfBrand: string;
 
-  @ApiProperty({example: 'TutuCompany', description: 'Имя компании'})
+  @ApiProperty({ example: 'TutuCompany', description: 'Имя компании' })
   @IsString()
   nameOfCompany: string;
 
-  @ApiProperty({example: 'State, region...', description: 'Адрес участника'})
+  @ApiProperty({ example: 'State, region...', description: 'Адрес участника' })
   @IsString()
   address: string;
 
-  @ApiProperty({example: 'Some text..', description: 'Описание участника'})
+  @ApiProperty({ example: 'Sovetskiy', description: 'Район участника' })
   @IsString()
-  definition: string;
+  district: string;
 
-  @ApiProperty({description: 'Является ли участник партнёром?'})
-  @IsBooleanString()
-  isPartner: boolean;
+  @ApiProperty({ example: 'Some text..', description: 'Описание участника' })
+  @IsString()
+  description: string;
 
   @ApiProperty({
     type: 'string',

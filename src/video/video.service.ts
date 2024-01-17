@@ -25,11 +25,20 @@ export class VideoService {
 
       return {
         totalVideo: totalVideos,
-        videos: paginatedVideos,
+        videos: paginatedVideos.sort((a, b) => {
+          const dateA = new Date(a.videoTime).getTime();
+          const dateB = new Date(b.videoTime).getTime();
+          return dateB - dateA;
+        }),
       };
     }
+    const videos = await this.videoModel.find({});
     return {
-      videos: await this.videoModel.find({}),
+      videos: videos.sort((a, b) => {
+        const dateA = new Date(a.videoTime).getTime();
+        const dateB = new Date(b.videoTime).getTime();
+        return dateB - dateA;
+      }),
     };
   }
 

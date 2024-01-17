@@ -21,7 +21,6 @@ export class ContactsService {
       number: dto.number,
       email: dto.email,
       whatsappLink: dto.whatsappLink,
-      telegramLink: dto.telegramLink,
     });
     return contacts.save().catch((e) => {
       if (e.toString().includes('E11000')) {
@@ -48,9 +47,6 @@ export class ContactsService {
     }
     if (dto.whatsappLink) {
       contacts.whatsappLink = dto.whatsappLink;
-    }
-    if (dto.telegramLink) {
-      contacts.telegramLink = dto.telegramLink;
     }
 
     return contacts.save();
