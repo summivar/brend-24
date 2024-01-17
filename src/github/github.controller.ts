@@ -1,7 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { GithubService } from './github.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Github')
 @Controller('github')
 export class GithubController {
   constructor(private githubService: GithubService) {

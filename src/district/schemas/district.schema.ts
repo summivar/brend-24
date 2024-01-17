@@ -5,12 +5,8 @@ export type DistrictDocument = District & Document;
 
 @Schema({
   timestamps: true,
-  _id: false,
 })
 export class District {
-  @Prop({ type: Types.ObjectId })
-  _id: Types.ObjectId;
-
   @Prop({ required: true, unique: true })
   name: string;
 

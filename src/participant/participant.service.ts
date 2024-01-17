@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Participant } from './schemas';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { EXCEPTION_MESSAGE } from '../constants';
 import { CreateParticipantDto, EditParticipantDto } from './dtos';
 import { FileSystemService } from '../common/file-system/file-system.service';
@@ -39,6 +39,18 @@ export class ParticipantService {
     }
   }
 
+  async getAllParticipantsByDistrictId(id: Types.ObjectId) {
+    const participants = [];
+    const participantsId = await this.districtService.getAllParticipantsIdByDistrictId(id);
+    for (const participantId of participantsId) {
+      const participant = await this.participantModel.findById(participantId);
+      if (participant) {
+        participants.push(participant);
+      }
+    }
+    return participants;
+  }
+
   async getAllParticipants(pageSize?: number, pageNumber?: number) {
     if (pageSize && pageNumber) {
       const skip = pageSize * (pageNumber - 1);
@@ -64,6 +76,7 @@ export class ParticipantService {
     const newParticipant = new this.participantModel({
       nameOfBrand: dto.nameOfBrand,
       nameOfCompany: dto.nameOfCompany,
+      description: dto.description,
       address: dto.address,
       district: district._id,
       definition: dto.description,
@@ -71,9 +84,10 @@ export class ParticipantService {
     });
     const participant = await newParticipant.save().catch(async (e) => {
       if (e.toString().includes('E11000')) {
-        await this.districtService.deleteDistrictById(district._id);
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
       }
+      console.log('Error while creating participant: ', e);
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.SOMETHING_GO_WRONG);
     });
     if (participant) {
       await this.districtService.updateParticipantInDistrict(participant._id, district._id, dto.district);
@@ -122,6 +136,12 @@ export class ParticipantService {
     return participant.save();
   }
 
+  async deleteDistrictFromParticipant(idDistrict: Types.ObjectId) {
+    return this.participantModel.findOneAndUpdate({ district: idDistrict }, {
+      district: undefined,
+    });
+  }
+
   async deleteAllParticipants() {
     const participants = await this.participantModel.find();
     if (!participants) {
@@ -130,6 +150,7 @@ export class ParticipantService {
 
     for (const participant of participants) {
       this.fileService.deleteFile(participant.logoPath);
+      await this.districtService.deleteParticipantFromDistrict(participant.district, participant._id);
     }
 
     return this.participantModel.deleteMany();
@@ -142,7 +163,7 @@ export class ParticipantService {
     }
 
     this.fileService.deleteFile(participant.logoPath);
-
+    await this.districtService.deleteParticipantFromDistrict(participant.district, participant._id);
 
     return this.participantModel.deleteOne(id);
   }

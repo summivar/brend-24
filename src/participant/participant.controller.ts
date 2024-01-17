@@ -16,7 +16,7 @@ import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags }
 import { ParticipantService } from './participant.service';
 import { CreateParticipantDto, EditParticipantDto } from './dtos';
 import { ParseObjectIdPipe } from '../pipes';
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FILE_LIMIT } from '../constants';
 import { extname } from 'path';
@@ -66,6 +66,18 @@ export class ParticipantController {
   @Get('getParticipantBy')
   async getParticipantBy(@Query('name') name?: string, @Query('id', new ParseObjectIdPipe({ isOptional: true })) id?: ObjectId) {
     return this.participantService.getParticipantBy(name, id);
+  }
+
+  @ApiOperation({ summary: 'Получение участников по district' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'ObjectID',
+    description: 'ID district',
+  })
+  @Get('getAllByDistrict/:id')
+  async getAllByDistrict(@Param('id', new ParseObjectIdPipe()) id: string) {
+    return this.participantService.getAllParticipantsByDistrictId(new Types.ObjectId(id));
   }
 
   @ApiOperation({ summary: 'Добавление участника' })

@@ -1,17 +1,20 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { District } from './schemas';
-import { Model, Types } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { EXCEPTION_MESSAGE } from '../constants';
+import { ParticipantService } from '../participant/participant.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class DistrictService {
   constructor(
     @InjectModel(District.name) private districtModel: Model<District>,
+    @Inject(forwardRef(() => UsersService)) private participantService: ParticipantService,
   ) {
   }
 
-  async getAllUsersIdByDistrictId(id: Types.ObjectId) {
+  async getAllParticipantsIdByDistrictId(id: Types.ObjectId) {
     const district = await this.districtModel.findById(id);
     if (!district) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
@@ -21,6 +24,10 @@ export class DistrictService {
 
   async getAllDistricts() {
     return this.districtModel.find();
+  }
+
+  async getById(id: ObjectId) {
+    return this.districtModel.findById(id);
   }
 
   async getOrCreateDistrict(district: string) {
@@ -35,8 +42,23 @@ export class DistrictService {
     }
   }
 
-  async updateParticipantInDistrict(idParticipant: Types.ObjectId, idDistrict: Types.ObjectId, newDistrict: string) {
-    const district = await this.districtModel.findById(idDistrict);
+  async edit(id: ObjectId, newName: string) {
+    const district = await this.districtModel.findById(id);
+    if (!district) {
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
+    }
+    district.name = newName;
+    return district.save();
+  }
+
+  async updateParticipantInDistrict(idParticipant: Types.ObjectId, oldDistrict: Types.ObjectId, newDistrict: string) {
+    const existedDistrict = await this.districtModel.findOne(oldDistrict);
+    if (existedDistrict) {
+      if (existedDistrict.participants.includes(idParticipant)) {
+        existedDistrict.participants = existedDistrict.participants.filter(participantId => participantId !== idParticipant);
+      }
+    }
+    const district = await this.getOrCreateDistrict(newDistrict);
     if (!district) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }
@@ -47,7 +69,26 @@ export class DistrictService {
     return district.save();
   }
 
+  async deleteAllDistrict() {
+    const districts = await this.districtModel.find();
+    if (!districts) {
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
+    }
+
+    for (const district of districts) {
+      await this.participantService.deleteDistrictFromParticipant(district._id);
+    }
+
+    return this.districtModel.deleteMany();
+  }
+
   async deleteDistrictById(idDistrict: Types.ObjectId) {
+    const district = await this.districtModel.findById(idDistrict);
+    if (!district) {
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
+    }
+
+    await this.participantService.deleteDistrictFromParticipant(district._id);
     return this.districtModel.deleteOne(idDistrict);
   }
 

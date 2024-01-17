@@ -19,6 +19,7 @@ import { UsersModule } from './users/users.module';
 import { GithubModule } from './github/github.module';
 import { PartnerModule } from './partner/partner.module';
 import { DistrictModule } from './district/district.module';
+import { CoversModule } from './covers/covers.module';
 
 @Module({
   imports: [
@@ -43,7 +44,6 @@ import { DistrictModule } from './district/district.module';
     AgreementModule,
     ContactsModule,
     AboutModule,
-    ParticipantModule,
     PhotoModule,
     VideoModule,
     NewsModule,
@@ -53,6 +53,8 @@ import { DistrictModule } from './district/district.module';
     GithubModule,
     PartnerModule,
     DistrictModule,
+    ParticipantModule,
+    CoversModule,
   ],
 })
 export class AppModule {

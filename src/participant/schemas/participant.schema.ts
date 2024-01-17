@@ -5,12 +5,8 @@ export type ParticipantDocument = Participant & Document;
 
 @Schema({
   timestamps: true,
-  _id: false,
 })
 export class Participant {
-  @Prop({type: Types.ObjectId})
-  _id: Types.ObjectId;
-
   @Prop({ required: true })
   nameOfBrand: string;
 
@@ -20,7 +16,7 @@ export class Participant {
   @Prop({ required: true })
   address: string;
 
-  @Prop({ type: Types.ObjectId, required: true })
+  @Prop({ type: Types.ObjectId })
   district: Types.ObjectId;
 
   @Prop({ required: true })
