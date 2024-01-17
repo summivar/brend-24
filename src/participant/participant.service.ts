@@ -73,6 +73,22 @@ export class ParticipantService {
     });
   }
 
+  async fakeCreate(dto: CreateParticipantDto, logoPath: string) {
+    const participant = new this.participantModel({
+      nameOfBrand: dto.nameOfBrand,
+      nameOfCompany: dto.nameOfCompany,
+      address: dto.address,
+      definition: dto.definition,
+      isPartner: dto.isPartner,
+      logoPath: logoPath,
+    });
+    return participant.save().catch((e) => {
+      if (e.toString().includes('E11000')) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
+      }
+    });
+  }
+
   async edit(dto: EditParticipantDto, logo: Express.Multer.File, id: ObjectId) {
     const participant = await this.participantModel.findById(id);
     if (!participant) {

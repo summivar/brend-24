@@ -18,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GithubModule } from './github/github.module';
 import { PartnerModule } from './partner/partner.module';
+import { FakerModule } from './faker/faker.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { PartnerModule } from './partner/partner.module';
     UsersModule,
     GithubModule,
     PartnerModule,
+    FakerModule,
   ],
 })
 export class AppModule {

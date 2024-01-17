@@ -17,6 +17,7 @@ import { CommonModule } from '../common/common.module';
   ],
   providers: [ParticipantService],
   controllers: [ParticipantController],
+  exports: [ParticipantService],
 })
 export class ParticipantModule {
 }
