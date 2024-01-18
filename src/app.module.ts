@@ -19,7 +19,7 @@ import { UsersModule } from './users/users.module';
 import { GithubModule } from './github/github.module';
 import { PartnerModule } from './partner/partner.module';
 import { DistrictModule } from './district/district.module';
-import { CoversModule } from './covers/covers.module';
+import { CoverModule } from './cover/cover.module';
 
 @Module({
   imports: [
@@ -54,7 +54,7 @@ import { CoversModule } from './covers/covers.module';
     PartnerModule,
     DistrictModule,
     ParticipantModule,
-    CoversModule,
+    CoverModule,
   ],
 })
 export class AppModule {

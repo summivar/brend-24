@@ -7,6 +7,9 @@ export type CoverDocument = Cover & Document;
   timestamps: true,
 })
 export class Cover {
+  @Prop({ required: true, unique: true })
+  uniqueId: string;
+
   @Prop({ required: true, default: [] })
   photosPath: string[];
 }

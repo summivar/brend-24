@@ -15,8 +15,8 @@ export class AgreementService {
   }
 
   async create(dto: CreateAgreementDto) {
-    const privacy = new this.agreementModel({ uniqueId: UNIQUAL_ID_CONSTANTS.AGREEMENT_ID, text: dto.text });
-    return privacy.save().catch((e) => {
+    const agreement = new this.agreementModel({ uniqueId: UNIQUAL_ID_CONSTANTS.AGREEMENT_ID, text: dto.text });
+    return agreement.save().catch((e) => {
       if (e.toString().includes('E11000')) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
       }

@@ -3,7 +3,6 @@ import { PrivacyService } from './privacy.service';
 import { PrivacyController } from './privacy.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Privacy, PrivacySchema } from './schemas';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: PrivacySchema,
       },
     ]),
-    AuthModule,
   ],
   providers: [PrivacyService],
   controllers: [PrivacyController],

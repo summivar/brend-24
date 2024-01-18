@@ -3,7 +3,6 @@ import { ContactsController } from './contacts.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Contacts, ContactsSchema } from './schemas';
 import { ContactsService } from './contacts.service';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: ContactsSchema,
       },
     ]),
-    AuthModule,
   ],
   providers: [ContactsService],
   controllers: [ContactsController],

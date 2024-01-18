@@ -1,14 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateCoverDto {
+export class AddPhotosCoverDto {
   @ApiProperty({
     type: 'array',
     items: {
       type: 'string',
       format: 'binary',
     },
-    description: 'Array of photo files',
-    required: true,
   })
-  photos: Express.Multer.File[];
+  photos: Array<Express.Multer.File>;
 }

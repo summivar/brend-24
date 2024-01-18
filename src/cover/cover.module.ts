@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CoversController } from './covers.controller';
-import { CoversService } from './covers.service';
+import { CoverService } from './cover.service';
+import { CoverController } from './cover.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Cover, CoverSchema } from './schemas';
 import { CommonModule } from '../common/common.module';
@@ -15,8 +15,8 @@ import { CommonModule } from '../common/common.module';
     ]),
     CommonModule,
   ],
-  controllers: [CoversController],
-  providers: [CoversService],
+  providers: [CoverService],
+  controllers: [CoverController],
 })
-export class CoversModule {
+export class CoverModule {
 }

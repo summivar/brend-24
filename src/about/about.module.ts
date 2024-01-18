@@ -3,7 +3,6 @@ import { AboutService } from './about.service';
 import { AboutController } from './about.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { About, AboutSchema } from './schemas';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: AboutSchema,
       },
     ]),
-    AuthModule,
   ],
   providers: [AboutService],
   controllers: [AboutController],

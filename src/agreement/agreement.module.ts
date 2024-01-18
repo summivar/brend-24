@@ -3,7 +3,6 @@ import { AgreementService } from './agreement.service';
 import { AgreementController } from './agreement.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Agreement, AgreementSchema } from './schemas';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AuthModule } from '../auth/auth.module';
         schema: AgreementSchema,
       },
     ]),
-    AuthModule,
   ],
   providers: [AgreementService],
   controllers: [AgreementController],

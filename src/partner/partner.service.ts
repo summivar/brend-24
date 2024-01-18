@@ -16,6 +16,9 @@ export class PartnerService {
 
   async getAll(pageSize?: number, pageNumber?: number) {
     if (pageSize && pageNumber) {
+      if (pageSize < 1 || pageNumber < 1) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA)
+      }
       const skip = pageSize * (pageNumber - 1);
       const totalPartners = await this.partnerModel.countDocuments();
       const paginatedPartners = await this.partnerModel.find()
