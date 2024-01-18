@@ -52,24 +52,24 @@ export class ParticipantService {
   }
 
   async getAllParticipants(pageSize?: number, pageNumber?: number, sort?: boolean) {
+    const participants = this.getSortedParticipants(await this.participantModel.find(), sort);
+
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
       }
+
       const skip = pageSize * (pageNumber - 1);
-      const totalParticipants = await this.participantModel.countDocuments();
-      const paginatedParticipants = await this.participantModel.find()
-        .skip(skip)
-        .limit(pageSize)
-        .exec();
+      const paginatedParticipants = participants.slice(skip, skip + pageSize);
 
       return {
-        totalParticipants: totalParticipants,
-        participants: this.getSortedParticipants(paginatedParticipants, sort),
+        totalParticipants: participants.length,
+        participants: paginatedParticipants,
       };
     }
+
     return {
-      participants: this.getSortedParticipants(await this.participantModel.find(), sort),
+      participants,
     };
   }
 
