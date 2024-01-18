@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
 
 export type ParticipantDocument = Participant & Document;
 
@@ -17,7 +17,7 @@ export class Participant {
   address: string;
 
   @Prop({ type: Types.ObjectId })
-  district: Types.ObjectId;
+  district: ObjectId;
 
   @Prop({ required: true })
   description: string;

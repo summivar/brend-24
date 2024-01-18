@@ -4,7 +4,7 @@ import { DistrictService } from './district.service';
 import { CreateDistrictDto, UpdateDistrictDto } from './dtos';
 import { AdminGuard } from '../auth/guards';
 import { ParseObjectIdPipe } from '../pipes';
-import { ObjectId, Types } from 'mongoose';
+import { ObjectId } from 'mongoose';
 
 @ApiTags('Районы')
 @Controller('district')
@@ -17,6 +17,7 @@ export class DistrictController {
   async getAllDistrict() {
     return this.districtService.getAllDistricts();
   }
+
   @ApiOperation({ summary: 'Получение района по ID' })
   @ApiParam({
     name: 'id',
@@ -34,7 +35,7 @@ export class DistrictController {
   @UseGuards(AdminGuard)
   @Post('create')
   async create(@Body() createDto: CreateDistrictDto) {
-    return this.districtService.getOrCreateDistrict(createDto.name);
+    return this.districtService.createDistrict(createDto.name);
   }
 
   @ApiOperation({ summary: 'Изменение района' })
@@ -49,7 +50,7 @@ export class DistrictController {
   @Put('edit/:id')
   async edit(
     @Body() createDto: UpdateDistrictDto,
-    @Param('id', new ParseObjectIdPipe()) id: ObjectId
+    @Param('id', new ParseObjectIdPipe()) id: ObjectId,
   ) {
     return this.districtService.edit(id, createDto.name);
   }
@@ -64,8 +65,8 @@ export class DistrictController {
     description: 'ID района',
   })
   @Delete('delete/:id')
-  async deleteDistrictById(@Param('id', new ParseObjectIdPipe()) id: string) {
-    return this.districtService.deleteDistrictById(new Types.ObjectId(id));
+  async deleteDistrictById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.districtService.deleteDistrictById(id);
   }
 
   @ApiOperation({ summary: 'Удаление всех районов' })

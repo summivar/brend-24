@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 export type DistrictDocument = District & Document;
 
@@ -11,7 +11,7 @@ export class District {
   name: string;
 
   @Prop({ default: [] })
-  participants: Types.ObjectId[];
+  participants: ObjectId[];
 }
 
 export const DistrictSchema = SchemaFactory.createForClass(District);

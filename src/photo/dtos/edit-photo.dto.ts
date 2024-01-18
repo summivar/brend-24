@@ -4,7 +4,7 @@ import { ObjectId } from 'mongoose';
 import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class EditPhotoDto {
-  @ApiProperty({ example: '2024-01-11T11:43:15+0000', description: 'Время фотографии' })
+  @ApiProperty({ example: '2024-01-11T11:43:15+0000', description: 'Время фотографии', required: false })
   @IsDateString({
     strict: true,
     strictSeparator: true,

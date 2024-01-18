@@ -30,16 +30,29 @@ export class DistrictService {
     return this.districtModel.findById(id);
   }
 
-  async getOrCreateDistrict(district: string) {
-    const foundDistrict = await this.districtModel.findOne({ name: district.toLowerCase().trim() });
-    if (foundDistrict) {
-      return foundDistrict;
-    } else {
-      const newDistrict = await this.districtModel.create({
-        name: district.toLowerCase().trim(),
-      });
-      return newDistrict.save();
+  async getDistrictByName(name: string) {
+    return this.districtModel.findOne({ name: name });
+  }
+
+  async createDistrict(name: string) {
+    const district = new this.districtModel({
+      name: name.toLowerCase().trim(),
+    });
+
+    return district.save().catch((e) => {
+      if (e.toString().includes('E11000')) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
+      }
+      throw new BadRequestException(e.toString());
+    });
+  }
+
+  async checkDistrictExists(id: ObjectId) {
+    const foundDistrict = await this.districtModel.findById(id);
+    if (!foundDistrict) {
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }
+    return foundDistrict;
   }
 
   async edit(id: ObjectId, newName: string) {
@@ -51,21 +64,14 @@ export class DistrictService {
     return district.save();
   }
 
-  async updateParticipantInDistrict(idParticipant: Types.ObjectId, oldDistrict: Types.ObjectId, newDistrict: string) {
-    const existedDistrict = await this.districtModel.findOne(oldDistrict);
-    if (existedDistrict) {
-      if (existedDistrict.participants.includes(idParticipant)) {
-        existedDistrict.participants = existedDistrict.participants.filter(participantId => participantId !== idParticipant);
-      }
-    }
-    const district = await this.getOrCreateDistrict(newDistrict);
+  async updateParticipantInDistrict(idParticipant: ObjectId, idDistrict: ObjectId) {
+    const district = await this.districtModel.findById(idDistrict);
     if (!district) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }
     if (!district.participants.includes(idParticipant)) {
       district.participants.push(idParticipant);
     }
-    district.name = newDistrict.toLowerCase().trim();
     return district.save();
   }
 
@@ -82,7 +88,7 @@ export class DistrictService {
     return this.districtModel.deleteMany();
   }
 
-  async deleteDistrictById(idDistrict: Types.ObjectId) {
+  async deleteDistrictById(idDistrict: ObjectId) {
     const district = await this.districtModel.findById(idDistrict);
     if (!district) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
@@ -92,7 +98,7 @@ export class DistrictService {
     return this.districtModel.deleteOne(idDistrict);
   }
 
-  async deleteParticipantFromDistrict(idDistrict: Types.ObjectId, idParticipant: Types.ObjectId) {
+  async deleteParticipantFromDistrict(idDistrict: ObjectId, idParticipant: ObjectId) {
     const district = await this.districtModel.findById(idDistrict);
     if (!district) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);

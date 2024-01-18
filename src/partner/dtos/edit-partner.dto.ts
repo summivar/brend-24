@@ -2,12 +2,12 @@ import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EditPartnerDto {
-  @ApiProperty({ example: 'TutuCompany', description: 'Имя компании' })
+  @ApiProperty({ example: 'TutuCompany', description: 'Имя компании', required: false })
   @IsString()
   @IsOptional()
   nameOfCompany: string;
 
-  @ApiProperty({ example: 'Description...', description: 'Описание компании' })
+  @ApiProperty({ example: 'Description...', description: 'Описание компании', required: false })
   @IsString()
   @IsOptional()
   description: string;

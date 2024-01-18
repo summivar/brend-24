@@ -1,5 +1,7 @@
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ObjectId } from 'mongoose';
+import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class CreateParticipantDto {
   @ApiProperty({ example: 'Tutu', description: 'Имя бренда' })
@@ -14,9 +16,9 @@ export class CreateParticipantDto {
   @IsString()
   address: string;
 
-  @ApiProperty({ example: 'Sovetskiy', description: 'Район участника' })
-  @IsString()
-  district: string;
+  @ApiProperty({ example: 'Object Id', description: 'Район участника' })
+  @IsObjectId()
+  district: ObjectId;
 
   @ApiProperty({ example: 'Some text..', description: 'Описание участника' })
   @IsString()

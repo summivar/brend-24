@@ -72,25 +72,27 @@ export class ParticipantService {
 
   async create(dto: CreateParticipantDto, logo: Express.Multer.File) {
     const logoPath = this.fileService.saveFile(logo);
-    const district = await this.districtService.getOrCreateDistrict(dto.district);
+    const district = await this.districtService.checkDistrictExists(dto.district);
+    if (!district) {
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.DISTRICT_NO_EXISTS);
+    }
     const newParticipant = new this.participantModel({
       nameOfBrand: dto.nameOfBrand,
       nameOfCompany: dto.nameOfCompany,
       description: dto.description,
       address: dto.address,
-      district: district._id,
+      district: dto.district,
       definition: dto.description,
       logoPath: logoPath,
     });
-    const participant = await newParticipant.save().catch(async (e) => {
+    const participant = await newParticipant.save().catch((e) => {
       if (e.toString().includes('E11000')) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
       }
-      console.log('Error while creating participant: ', e);
-      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.SOMETHING_GO_WRONG);
+      throw new BadRequestException(e.toString());
     });
     if (participant) {
-      await this.districtService.updateParticipantInDistrict(participant._id, district._id, dto.district);
+      await this.districtService.updateParticipantInDistrict(participant.id, dto.district);
     }
     return participant;
   }
@@ -114,13 +116,19 @@ export class ParticipantService {
     }
 
     if (dto.district) {
-      const district = await this.districtService.updateParticipantInDistrict(
-        participant._id,
+      const district = await this.districtService.checkDistrictExists(dto.district);
+      if (!district) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.DISTRICT_NO_EXISTS);
+      }
+
+      await this.districtService.deleteParticipantFromDistrict(
         participant.district,
-        dto.district,
+        participant.id,
       );
 
-      participant.district = district._id;
+      participant.district = district.id;
+
+      await this.districtService.updateParticipantInDistrict(participant.id, dto.district);
     }
 
     if (dto.description) {
@@ -150,7 +158,7 @@ export class ParticipantService {
 
     for (const participant of participants) {
       this.fileService.deleteFile(participant.logoPath);
-      await this.districtService.deleteParticipantFromDistrict(participant.district, participant._id);
+      await this.districtService.deleteParticipantFromDistrict(participant.district, participant.id);
     }
 
     return this.participantModel.deleteMany();
@@ -163,7 +171,7 @@ export class ParticipantService {
     }
 
     this.fileService.deleteFile(participant.logoPath);
-    await this.districtService.deleteParticipantFromDistrict(participant.district, participant._id);
+    await this.districtService.deleteParticipantFromDistrict(participant.district, participant.id);
 
     return this.participantModel.deleteOne(id);
   }

@@ -1,25 +1,23 @@
 import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongoose';
-import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class EditNewsDto {
-  @ApiProperty({example: 'Name', description: 'Имя новости'})
+  @ApiProperty({example: 'Name', description: 'Имя новости', required: false})
   @IsString()
   @IsOptional()
   name: string;
 
-  @ApiProperty({example: 'Slug', description: 'Slug новости'})
+  @ApiProperty({example: 'Slug', description: 'Slug новости', required: false})
   @IsString()
   @IsOptional()
   slug: string;
 
-  @ApiProperty({example: 'Photo caption', description: 'Подпись к фото новости'})
+  @ApiProperty({example: 'Photo caption', description: 'Подпись к фото новости', required: false})
   @IsString()
   @IsOptional()
   photoCaption: string;
 
-  @ApiProperty({example: 'Tutu tutu tutu', description: 'Текст новости'})
+  @ApiProperty({example: 'Tutu tutu tutu', description: 'Текст новости', required: false})
   @IsString()
   @IsOptional()
   newsText: string;
@@ -28,7 +26,7 @@ export class EditNewsDto {
     type: 'string',
     format: 'binary',
     description: 'Фото новости',
-    required: true,
+    required: false,
   })
   @IsOptional()
   image: Express.Multer.File;

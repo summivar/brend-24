@@ -6,6 +6,7 @@ export const EXCEPTION_MESSAGE = {
     ALREADY_EXISTS: 'Entity already exists',
     SOMETHING_GO_WRONG: 'Something go wrong',
     NO_PHOTOS: 'No photos in request',
+    DISTRICT_NO_EXISTS: 'District do not exists',
   },
   UNAUTHORIZED_EXCEPTION: {
     INVALID_CREDENTIALS: 'Invalid credentials',
