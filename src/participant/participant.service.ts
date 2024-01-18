@@ -51,10 +51,10 @@ export class ParticipantService {
     return participants;
   }
 
-  async getAllParticipants(pageSize?: number, pageNumber?: number) {
+  async getAllParticipants(pageSize?: number, pageNumber?: number, sort?: boolean) {
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
-        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA)
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
       }
       const skip = pageSize * (pageNumber - 1);
       const totalParticipants = await this.participantModel.countDocuments();
@@ -65,11 +65,11 @@ export class ParticipantService {
 
       return {
         totalParticipants: totalParticipants,
-        participants: paginatedParticipants,
+        participants: this.getSortedParticipants(paginatedParticipants, sort),
       };
     }
     return {
-      participants: await this.participantModel.find(),
+      participants: this.getSortedParticipants(await this.participantModel.find(), sort),
     };
   }
 
@@ -178,4 +178,8 @@ export class ParticipantService {
 
     return this.participantModel.deleteOne(id);
   }
+
+  private getSortedParticipants = (participants: any, sort?: boolean) => {
+    return sort ? participants.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) : participants;
+  };
 }

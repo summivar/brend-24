@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Post,
   Put,
@@ -44,12 +45,18 @@ export class ParticipantController {
       'Номер страницы. Страницы начинаются с 1. ' +
       'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
   })
+  @ApiQuery({
+    name: 'sort',
+    required: false,
+    description: 'При sort=true, вывод от новых к старым. При sort=false или undefined, вывод от старых к новым',
+  })
   @Get('getAllParticipants')
   async getAllParticipants(
     @Query('pageSize', new ParseIntPipe({ optional: true })) pageSize?: number,
     @Query('pageNumber', new ParseIntPipe({ optional: true })) pageNumber?: number,
+    @Query('sort', new ParseBoolPipe({ optional: true })) sort?: boolean,
   ) {
-    return this.participantService.getAllParticipants(pageSize, pageNumber);
+    return this.participantService.getAllParticipants(pageSize, pageNumber, sort);
   }
 
   @ApiOperation({ summary: 'Получение участника по name или Id' })

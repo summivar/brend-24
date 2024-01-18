@@ -17,7 +17,7 @@ export class CreateParticipantDto {
   address: string;
 
   @ApiProperty({ example: 'Object Id', description: 'Район участника' })
-  @IsObjectId()
+  @IsObjectId({ message: 'Cannot transform string to ObjectID' })
   district: ObjectId;
 
   @ApiProperty({ example: 'Some text..', description: 'Описание участника' })

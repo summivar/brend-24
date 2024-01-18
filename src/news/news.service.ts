@@ -16,13 +16,8 @@ export class NewsService {
 
   async getAllNews() {
     const news = await this.newsModel.find();
-    return news.sort((a, b) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
+    return news.sort((a: any, b: any) => {
       const dateA = new Date(a.createdAt).getTime();
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       const dateB = new Date(b.createdAt).getTime();
       return dateB - dateA;
     });

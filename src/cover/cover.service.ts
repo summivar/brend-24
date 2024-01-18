@@ -16,6 +16,9 @@ export class CoverService {
     });
 
     cover.save().catch((e) => {
+      if (e.toString().includes('E11000')) {
+        return;
+      }
       console.log(e.toString());
     });
   }
@@ -52,15 +55,7 @@ export class CoverService {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
     }
 
-    console.log({
-      oldCover: cover.photosPath,
-      index,
-    });
     const removedPhotoPath = cover.photosPath.splice(index, 1)[0];
-
-    console.log({
-      newCover: cover.photosPath,
-    });
 
     this.fileService.deleteFile(removedPhotoPath);
 
