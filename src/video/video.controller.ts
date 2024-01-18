@@ -1,24 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param, ParseIntPipe,
-  Post,
-  Put, Query,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { VideoService } from './video.service';
 import { ParseObjectIdPipe } from '../pipes';
 import { ObjectId } from 'mongoose';
 import { CreateVideoDto, EditVideoDto } from './dtos';
-import { ValidationException } from '../exceptions';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { extname } from 'path';
-import { FILE_LIMIT } from '../constants';
 import { AdminGuard } from '../auth/guards';
 
 @ApiTags('Видео')
@@ -72,7 +57,7 @@ export class VideoController {
     return this.videoService.edit(editDto, id);
   }
 
-  @ApiOperation({summary: 'Удаление видео по ID'})
+  @ApiOperation({ summary: 'Удаление видео по ID' })
   @ApiParam({
     name: 'id',
     required: true,
@@ -86,7 +71,7 @@ export class VideoController {
     return this.videoService.deleteById(id);
   }
 
-  @ApiOperation({summary: 'Удаление всех видео'})
+  @ApiOperation({ summary: 'Удаление всех видео' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminGuard)
   @Delete('deleteAll')

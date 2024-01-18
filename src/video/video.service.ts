@@ -66,13 +66,14 @@ export class VideoService {
     const video = new this.videoModel({
       videoTime: dto.videoTime,
       videoCaption: dto.videoCaption,
-      videoPath: dto.videoLink
+      videoLink: dto.videoLink,
     });
 
     return video.save().catch((e) => {
       if (e.toString().includes('E11000')) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
       }
+      console.log(e);
     });
   }
 
