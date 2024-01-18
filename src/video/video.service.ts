@@ -73,7 +73,7 @@ export class VideoService {
       if (e.toString().includes('E11000')) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
       }
-      console.log(e);
+      throw new BadRequestException(e.toString());
     });
   }
 

@@ -16,6 +16,7 @@ export class UsersService {
     });
 
     adminUser.save().catch((e) => {
+      console.log(e.toString());
     });
   }
 
