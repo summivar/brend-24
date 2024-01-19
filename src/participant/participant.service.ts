@@ -138,7 +138,7 @@ export class ParticipantService {
       participant.description = dto.description;
     }
 
-    if (logo) {
+    if (logo.buffer) {
       const newLogoPath = this.fileService.saveFile(logo);
       this.fileService.deleteFile(participant.logoPath);
       participant.logoPath = newLogoPath;

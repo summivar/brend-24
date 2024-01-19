@@ -20,6 +20,8 @@ import { GithubModule } from './github/github.module';
 import { PartnerModule } from './partner/partner.module';
 import { DistrictModule } from './district/district.module';
 import { CoverModule } from './cover/cover.module';
+import { WinnerModule } from './winner/winner.module';
+import { ClauseModule } from './clause/clause.module';
 
 @Module({
   imports: [
@@ -55,6 +57,8 @@ import { CoverModule } from './cover/cover.module';
     DistrictModule,
     ParticipantModule,
     CoverModule,
+    WinnerModule,
+    ClauseModule,
   ],
 })
 export class AppModule {
