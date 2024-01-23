@@ -11,13 +11,13 @@ export class Contacts {
   uniqueId: string;
 
   @Prop({ required: true })
-  address: string;
+  address: string[];
 
   @Prop({ required: true })
   number: string[];
 
   @Prop({ required: true })
-  email: string[];
+  email: string;
 
   @Prop({ required: true })
   whatsappLink: string;

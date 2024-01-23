@@ -2,10 +2,12 @@ import { ArrayNotEmpty, IsArray, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EditContactsDto {
-  @ApiProperty({example: 'State, region..', description: 'Адрес', required: false})
-  @IsString()
+  @ApiProperty({example: ['State, region..'], description: 'Адрес', required: false})
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
   @IsOptional()
-  address: string;
+  address: string[];
 
   @ApiProperty({example: ['+79876543210'], description: 'Номер телефона', required: false})
   @IsArray()
@@ -15,11 +17,9 @@ export class EditContactsDto {
   number: string[];
 
   @ApiProperty({example: ['email@mail.ru'], description: 'Почта', required: false})
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
+  @IsString()
   @IsOptional()
-  email: string[];
+  email: string;
 
   @ApiProperty({example: 'https://whatapp.com/tutu', description: 'Ссылка на WhatsApp', required: false})
   @IsString()

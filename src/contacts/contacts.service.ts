@@ -11,7 +11,16 @@ export class ContactsService {
   }
 
   async get() {
-    return this.contactsModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.CONTACTS_ID });
+    const contact = this.contactsModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.CONTACTS_ID });
+    if (!contact) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    contact.telegramLink = undefined;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return contact.save();
   }
 
   async create(dto: CreateContactsDto) {
@@ -37,13 +46,13 @@ export class ContactsService {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
     }
 
-    if (dto.address) {
+    if (dto.address.length) {
       contacts.address = dto.address;
     }
     if (dto.number.length) {
       contacts.number = dto.number;
     }
-    if (dto.email.length) {
+    if (dto.email) {
       contacts.email = dto.email;
     }
     if (dto.whatsappLink) {
