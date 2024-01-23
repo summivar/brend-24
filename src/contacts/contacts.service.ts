@@ -11,16 +11,7 @@ export class ContactsService {
   }
 
   async get() {
-    const contact = this.contactsModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.CONTACTS_ID });
-    if (!contact) {
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    contact.telegramLink = undefined;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return contact.save();
+    return this.contactsModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.CONTACTS_ID });
   }
 
   async create(dto: CreateContactsDto) {
