@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { EventService } from './event.service';
 import { CreateEventDto, EditEventDto } from './dtos';
 import { ObjectId } from 'mongoose';
@@ -13,9 +13,26 @@ export class EventController {
   }
 
   @ApiOperation({ summary: 'Получение всех мероприятий' })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    description:
+      'Размер страницы. Выдаёт столько мероприятий, сколько указано здесь, либо же столько, сколько осталось. ' +
+      'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
+  })
+  @ApiQuery({
+    name: 'pageNumber',
+    required: false,
+    description:
+      'Номер страницы. Страницы начинаются с 1. ' +
+      'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
+  })
   @Get('getAll')
-  async getAll() {
-    return this.eventService.getAll();
+  async getAll(
+    @Query('pageSize', new ParseIntPipe({ optional: true })) pageSize?: number,
+    @Query('pageNumber', new ParseIntPipe({ optional: true })) pageNumber?: number,
+  ) {
+    return this.eventService.getAll(pageSize, pageNumber);
   }
 
   @ApiOperation({ summary: 'Получение мероприятия по ID' })

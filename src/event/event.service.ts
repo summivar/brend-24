@@ -10,8 +10,27 @@ export class EventService {
   constructor(@InjectModel(Event.name) private eventModel: Model<Event>) {
   }
 
-  async getAll() {
-    return this.eventModel.find();
+  async getAll(pageSize?: number, pageNumber?: number) {
+    if (pageSize && pageNumber) {
+      if (pageSize < 1 || pageNumber < 1) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
+      }
+      const skip = pageSize * (pageNumber - 1);
+      const totalEvents = await this.eventModel.countDocuments({});
+      const paginatedEvents = await this.eventModel.find({})
+        .skip(skip)
+        .limit(pageSize)
+        .exec();
+
+      return {
+        totalEvents: totalEvents,
+        events: paginatedEvents,
+      };
+    }
+    const events = await this.eventModel.find({});
+    return {
+      events: events,
+    };
   }
 
   async getById(id: ObjectId) {
