@@ -14,10 +14,10 @@ export class Contacts {
   address: string;
 
   @Prop({ required: true })
-  number: string;
+  number: string[];
 
   @Prop({ required: true })
-  email: string;
+  email: string[];
 
   @Prop({ required: true })
   whatsappLink: string;

@@ -40,10 +40,10 @@ export class ContactsService {
     if (dto.address) {
       contacts.address = dto.address;
     }
-    if (dto.number) {
+    if (dto.number.length) {
       contacts.number = dto.number;
     }
-    if (dto.email) {
+    if (dto.email.length) {
       contacts.email = dto.email;
     }
     if (dto.whatsappLink) {
