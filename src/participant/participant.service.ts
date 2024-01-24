@@ -23,11 +23,13 @@ export class ParticipantService {
 
     if (name) {
       const regex = new RegExp(name, 'i');
-      const participantBySlug = await this.participantModel.find({ nameOfCompany: { $regex: regex } });
-      if (!participantBySlug) {
+      const participantsBySlug = await this.participantModel.find({ nameOfCompany: { $regex: regex } });
+      if (!participantsBySlug) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
       }
-      return participantBySlug;
+      return {
+        participants: participantsBySlug,
+      };
     }
 
     if (id) {
