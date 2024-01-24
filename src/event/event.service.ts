@@ -32,7 +32,7 @@ export class EventService {
       events: events.sort((a, b) => {
         const dateA = new Date(a.startTime).getTime();
         const dateB = new Date(b.startTime).getTime();
-        return dateB - dateA;
+        return dateA - dateB;
       }),
     };
   }
