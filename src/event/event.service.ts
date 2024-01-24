@@ -24,7 +24,11 @@ export class EventService {
 
       return {
         totalEvents: totalEvents,
-        events: paginatedEvents,
+        events: paginatedEvents.sort((a, b) => {
+          const dateA = new Date(a.startTime).getTime();
+          const dateB = new Date(b.startTime).getTime();
+          return dateA - dateB;
+        }),
       };
     }
     const events = await this.eventModel.find({});
