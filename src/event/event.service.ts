@@ -29,7 +29,11 @@ export class EventService {
     }
     const events = await this.eventModel.find({});
     return {
-      events: events,
+      events: events.sort((a, b) => {
+        const dateA = new Date(a.startTime).getTime();
+        const dateB = new Date(b.startTime).getTime();
+        return dateB - dateA;
+      }),
     };
   }
 
