@@ -14,13 +14,26 @@ export class NewsService {
   ) {
   }
 
-  async getAllNews() {
-    const news = await this.newsModel.find();
-    return news.sort((a: any, b: any) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return dateB - dateA;
-    });
+  async getAllNews(pageSize?: number, pageNumber?: number) {
+    let query = this.newsModel.find({});
+    query = query.sort([['newsDate', -1]]);
+
+    if (pageSize && pageNumber) {
+      if (pageSize < 1 || pageNumber < 1) {
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
+      }
+
+      const skip = pageSize * (pageNumber - 1);
+      query = query.skip(skip).limit(pageSize);
+    }
+
+    const totalNews = await this.newsModel.countDocuments({});
+    const news = await query.exec();
+
+    return {
+      totalPhotos: totalNews,
+      news: news,
+    };
   }
 
   async getBy(slug?: string, id?: ObjectId) {
@@ -51,6 +64,7 @@ export class NewsService {
       name: dto.name,
       slug: dto.slug,
       photoPath: photoPath,
+      newsDate: dto.newsDate,
       photoCaption: dto.photoCaption,
       newsText: dto.newsText,
     });
@@ -84,6 +98,10 @@ export class NewsService {
 
     if (dto.newsText) {
       news.newsText = dto.newsText;
+    }
+
+    if (dto.newsDate) {
+      news.newsDate = dto.newsDate;
     }
 
     if (image.buffer) {

@@ -22,6 +22,7 @@ import { DistrictModule } from './district/district.module';
 import { CoverModule } from './cover/cover.module';
 import { WinnerModule } from './winner/winner.module';
 import { ClauseModule } from './clause/clause.module';
+import { VoteModule } from './vote/vote.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { ClauseModule } from './clause/clause.module';
     CoverModule,
     WinnerModule,
     ClauseModule,
+    VoteModule,
   ],
 })
 export class AppModule {

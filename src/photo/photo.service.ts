@@ -15,33 +15,24 @@ export class PhotoService {
   }
 
   async getAll(pageSize?: number, pageNumber?: number) {
+    let query = this.photoModel.find({});
+    query = query.sort([['photoTime', -1]]);
+
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
-        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA)
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
       }
-      const skip = pageSize * (pageNumber - 1);
-      const totalPhotos = await this.photoModel.countDocuments({});
-      const paginatedPhotos = await this.photoModel.find({})
-        .skip(skip)
-        .limit(pageSize)
-        .exec();
 
-      return {
-        totalPhotos: totalPhotos,
-        photos: paginatedPhotos.sort((a, b) => {
-          const dateA = new Date(a.photoTime).getTime();
-          const dateB = new Date(b.photoTime).getTime();
-          return dateB - dateA;
-        }),
-      };
+      const skip = pageSize * (pageNumber - 1);
+      query = query.skip(skip).limit(pageSize);
     }
-    const photos = await this.photoModel.find({});
+
+    const totalPhotos = await this.photoModel.countDocuments({});
+    const paginatedPhotos = await query.exec();
+
     return {
-      photos: photos.sort((a, b) => {
-        const dateA = new Date(a.photoTime).getTime();
-        const dateB = new Date(b.photoTime).getTime();
-        return dateB - dateA;
-      }),
+      totalPhotos: totalPhotos,
+      photos: paginatedPhotos,
     };
   }
 

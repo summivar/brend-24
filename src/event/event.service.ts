@@ -11,33 +11,24 @@ export class EventService {
   }
 
   async getAll(pageSize?: number, pageNumber?: number) {
+    let query = this.eventModel.find({});
+    query = query.sort([['startTime', -1]]);
+
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
       }
-      const skip = pageSize * (pageNumber - 1);
-      const totalEvents = await this.eventModel.countDocuments({});
-      const paginatedEvents = await this.eventModel.find({})
-        .skip(skip)
-        .limit(pageSize)
-        .exec();
 
-      return {
-        totalEvents: totalEvents,
-        events: paginatedEvents.sort((a, b) => {
-          const dateA = new Date(a.startTime).getTime();
-          const dateB = new Date(b.startTime).getTime();
-          return dateA - dateB;
-        }),
-      };
+      const skip = pageSize * (pageNumber - 1);
+      query = query.skip(skip).limit(pageSize);
     }
-    const events = await this.eventModel.find({});
+
+    const totalEvents = await this.eventModel.countDocuments({});
+    const events = await query.exec();
+
     return {
-      events: events.sort((a, b) => {
-        const dateA = new Date(a.startTime).getTime();
-        const dateB = new Date(b.startTime).getTime();
-        return dateA - dateB;
-      }),
+      totalEvents: totalEvents,
+      events: events,
     };
   }
 

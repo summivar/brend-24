@@ -5,4 +5,5 @@ export const UNIQUAL_ID_CONSTANTS = {
   ABOUT_ID: 'ABOUT_ID',
   COVER_ID: 'COVER_ID',
   CLAUSE_ID: 'CLAUSE_ID',
+  VOTE_ID: 'VOTE_ID',
 };

@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EditNewsDto {
@@ -21,6 +21,14 @@ export class EditNewsDto {
   @IsString()
   @IsOptional()
   newsText: string;
+
+  @ApiProperty({ example: '2024-01-11T11:43:15+0000', description: 'Время новости' })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
+  @IsOptional()
+  newsDate: Date;
 
   @ApiProperty({
     type: 'string',

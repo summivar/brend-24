@@ -13,33 +13,25 @@ export class VideoService {
   }
 
   async getAll(pageSize: number, pageNumber: number) {
+    let query = this.videoModel.find({});
+
+    query = query.sort([['videoTime', -1]]);
+
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
-        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA)
+        throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
       }
-      const skip = pageSize * (pageNumber - 1);
-      const totalVideos = await this.videoModel.countDocuments({});
-      const paginatedVideos = await this.videoModel.find({})
-        .skip(skip)
-        .limit(pageSize)
-        .exec();
 
-      return {
-        totalVideo: totalVideos,
-        videos: paginatedVideos.sort((a, b) => {
-          const dateA = new Date(a.videoTime).getTime();
-          const dateB = new Date(b.videoTime).getTime();
-          return dateB - dateA;
-        }),
-      };
+      const skip = pageSize * (pageNumber - 1);
+      query = query.skip(skip).limit(pageSize);
     }
-    const videos = await this.videoModel.find({});
+
+    const totalVideos = await this.videoModel.countDocuments({});
+    const videos = await query.exec();
+
     return {
-      videos: videos.sort((a, b) => {
-        const dateA = new Date(a.videoTime).getTime();
-        const dateB = new Date(b.videoTime).getTime();
-        return dateB - dateA;
-      }),
+      totalVideos: totalVideos,
+      videos: videos,
     };
   }
 

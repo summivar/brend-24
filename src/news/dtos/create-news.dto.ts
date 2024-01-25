@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsDateString, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateNewsDto {
@@ -17,6 +17,13 @@ export class CreateNewsDto {
   @ApiProperty({example: 'Tutu tutu tutu', description: 'Текст новости'})
   @IsString()
   newsText: string;
+
+  @ApiProperty({ example: '2024-01-11T11:43:15+0000', description: 'Время новости' })
+  @IsDateString({
+    strict: true,
+    strictSeparator: true,
+  })
+  newsDate: Date;
 
   @ApiProperty({
     type: 'string',

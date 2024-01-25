@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -15,7 +16,7 @@ import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiTags }
 import { NewsService } from './news.service';
 import { CreateNewsDto, EditNewsDto } from './dtos';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FILE_LIMIT } from '../constants/file-limits.constants';
+import { FILE_LIMIT } from '../constants';
 import { extname } from 'path';
 import { ValidationException } from '../exceptions';
 import { ParseObjectIdPipe } from '../pipes';
@@ -29,24 +30,41 @@ export class NewsController {
   }
 
   @ApiOperation({ summary: 'Получение всех новостей, отсортированных по дате, более новые первее' })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    description:
+      'Размер страницы. Выдаёт столько новостей, сколько указано здесь, либо же столько, сколько осталось. ' +
+      'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
+  })
+  @ApiQuery({
+    name: 'pageNumber',
+    required: false,
+    description:
+      'Номер страницы. Страницы начинаются с 1. ' +
+      'Если не указан один из "pageNumber" и "pageSize", их проигнорируют.',
+  })
   @Get('getAll')
-  async getAllNews() {
-    return this.newsService.getAllNews();
+  async getAllNews(
+    @Query('pageSize', new ParseIntPipe({ optional: true })) pageSize?: number,
+    @Query('pageNumber', new ParseIntPipe({ optional: true })) pageNumber?: number,
+  ) {
+    return this.newsService.getAllNews(pageSize, pageNumber);
   }
 
   @ApiOperation({ summary: 'Получение новости по slug или id' })
   @ApiQuery({
     name: 'slug',
     required: false,
-    description: 'Для поиска по Slug'
+    description: 'Для поиска по Slug',
   })
   @ApiQuery({
     name: 'id',
     required: false,
-    description: 'Для поиска по ID'
+    description: 'Для поиска по ID',
   })
   @Get('getBy')
-  async getBy(@Query('slug') slug?: string, @Query('id', new ParseObjectIdPipe()) id?: ObjectId) {
+  async getBy(@Query('slug') slug?: string, @Query('id', new ParseObjectIdPipe({ isOptional: true })) id?: ObjectId) {
     return this.newsService.getBy(slug, id);
   }
 
@@ -107,7 +125,7 @@ export class NewsController {
     example: 'ObjectID',
     description: 'ID новости',
   })
-  @Delete('delete')
+  @Delete('delete/:id')
   async deleteById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
     return this.newsService.deleteById(id);
   }
