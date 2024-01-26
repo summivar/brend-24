@@ -47,7 +47,7 @@ export class VoteService {
       vote.votingId = dto.votingId;
     }
 
-    if (dto.isEnabled) {
+    if (dto.isEnabled !== undefined) {
       vote.isEnabled = dto.isEnabled;
     }
 
