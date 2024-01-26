@@ -31,7 +31,7 @@ export class NewsService {
     const news = await query.exec();
 
     return {
-      totalPhotos: totalNews,
+      totalNews: totalNews,
       news: news,
     };
   }
@@ -120,5 +120,17 @@ export class NewsService {
     }
     this.fileService.deleteFile(news.photoPath);
     return this.newsModel.deleteOne(id);
+  }
+
+  async deleteAll() {
+    const news_all = await this.newsModel.find();
+    if (!news_all) {
+      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
+    }
+    for (const news of news_all) {
+      this.fileService.deleteFile(news.photoPath)
+    }
+
+    return this.newsModel.deleteMany();
   }
 }

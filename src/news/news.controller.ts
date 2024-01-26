@@ -129,4 +129,12 @@ export class NewsController {
   async deleteById(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
     return this.newsService.deleteById(id);
   }
+
+  @ApiOperation({ summary: 'Удаление всех новостей' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @Delete('deleteAll')
+  async deleteAll() {
+    return this.newsService.deleteAll();
+  }
 }
