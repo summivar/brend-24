@@ -19,6 +19,7 @@ export class VoteService {
 
   async create(dto: CreateVoteDto) {
     const vote = new this.voteModel({
+      uniqueId: UNIQUAL_ID_CONSTANTS.VOTE_ID,
       link: dto.link,
       votingId: dto.votingId,
       isEnabled: dto.isEnabled,

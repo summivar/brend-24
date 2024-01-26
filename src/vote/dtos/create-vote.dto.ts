@@ -1,4 +1,4 @@
-import { IsBooleanString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateVoteDto {
@@ -6,16 +6,16 @@ export class CreateVoteDto {
   @IsString()
   link: string;
 
-  @ApiProperty({ example: 'id', description: 'ID голосования' })
-  @IsNumber()
+  @ApiProperty({ example: 5, description: 'ID голосования' })
+  @IsInt()
   votingId: number;
 
   @ApiProperty({
     example: 'true',
-    description: 'Врублено ли голосование, необязательный. По дефолту false. Принимает "1", "0", "false", "true"',
+    description: 'Врублено ли голосование, необязательный. По дефолту false.',
     required: false,
   })
-  @IsBooleanString()
+  @IsBoolean()
   @IsOptional()
   isEnabled: boolean;
 }
