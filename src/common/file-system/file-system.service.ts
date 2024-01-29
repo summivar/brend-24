@@ -6,14 +6,20 @@ import * as path from 'path';
 
 @Injectable()
 export class FileSystemService {
-  saveFile(file: Express.Multer.File): string {
+  saveFile(file: Express.Multer.File, fixedName?: string): string {
     try {
       if (!fs.existsSync(PATH.UPLOADS_PATH)) {
         fs.mkdirSync(PATH.UPLOADS_PATH, { recursive: true });
       }
 
       if (file) {
-        const fileName = `${uuid()}.${file.originalname}`;
+        let fileName: string;
+        if (fixedName) {
+          const ext = path.extname(file.originalname).toLowerCase();
+          fileName = `${fixedName}${ext}`;
+        } else {
+          fileName = `${uuid()}.${file.originalname}`;
+        }
         const filePath = path.join(PATH.UPLOADS_PATH, fileName);
 
         fs.writeFileSync(filePath, file.buffer);
