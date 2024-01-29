@@ -26,7 +26,7 @@ export class ClauseService {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
     }
 
-    const filePath = this.fileService.saveFile(file);
+    const filePath = this.fileService.saveFile(file, 'polozhenie');
     const newClause = new this.clausModel({
       uniqueId: UNIQUAL_ID_CONSTANTS.CLAUSE_ID,
       filePath: filePath,
@@ -47,7 +47,7 @@ export class ClauseService {
     }
 
     this.fileService.deleteFile(clause.filePath);
-    clause.filePath = this.fileService.saveFile(file);
+    clause.filePath = this.fileService.saveFile(file, 'polozhenie');
 
     return clause.save();
   }
