@@ -28,7 +28,7 @@ export class FileSystemService {
       }
     } catch (e) {
       console.log(e);
-      throw `Error while saving image: ${e}`;
+      throw new BadRequestException(`Error while saving image: ${e}`);
     }
   }
 
@@ -37,6 +37,7 @@ export class FileSystemService {
       const realFilePath = path.join(PATH.UPLOADS_PATH, filePath);
       fs.unlink(realFilePath, (err) => {
         if (err) {
+          console.log('Error while deleting: ', err);
           throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.SOMETHING_GO_WRONG);
         }
       });
