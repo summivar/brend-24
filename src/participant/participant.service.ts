@@ -163,7 +163,7 @@ export class ParticipantService {
 
     for (const participant of participants) {
       this.fileService.deleteFile(participant.logoPath);
-      await this.districtService.deleteParticipantFromDistrict(participant.district, participant.id);
+      // await this.districtService.deleteParticipantFromDistrict(participant.district, participant.id);
     }
 
     return this.participantModel.deleteMany();
