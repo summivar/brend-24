@@ -16,7 +16,6 @@ import { NewsModule } from './news/news.module';
 import { EventModule } from './event/event.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { GithubModule } from './github/github.module';
 import { PartnerModule } from './partner/partner.module';
 import { DistrictModule } from './district/district.module';
 import { CoverModule } from './cover/cover.module';
@@ -53,7 +52,6 @@ import { VoteModule } from './vote/vote.module';
     EventModule,
     AuthModule,
     UsersModule,
-    GithubModule,
     PartnerModule,
     DistrictModule,
     ParticipantModule,
