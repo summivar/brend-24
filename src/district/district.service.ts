@@ -36,7 +36,7 @@ export class DistrictService {
 
   async createDistrict(name: string) {
     const district = new this.districtModel({
-      name: name.toLowerCase().trim(),
+      name: name.trim(),
     });
 
     return district.save().catch((e) => {
@@ -60,7 +60,7 @@ export class DistrictService {
     if (!district) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }
-    district.name = newName;
+    district.name = newName.trim();
     return district.save();
   }
 
