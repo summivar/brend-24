@@ -83,7 +83,7 @@ export class ParticipantController {
     description: 'ID district',
   })
   @Get('getAllByDistrict/:id')
-  async getAllByDistrict(@Param('id', new ParseObjectIdPipe()) id: string) {
+  async getAllByDistrict(@Param('id', new ParseObjectIdPipe({ isOptional: true })) id: string) {
     return this.participantService.getAllParticipantsByDistrictId(new Types.ObjectId(id));
   }
 
