@@ -78,13 +78,13 @@ export class ParticipantController {
   @ApiOperation({ summary: 'Получение участников по district' })
   @ApiParam({
     name: 'id',
-    required: false,
+    required: true,
     example: 'ObjectID',
     description: 'ID district',
   })
   @Get('getAllByDistrict/:id')
-  async getAllByDistrict(@Param('id', new ParseObjectIdPipe({ isOptional: true })) id: string) {
-    return this.participantService.getAllParticipantsByDistrictId(new Types.ObjectId(id));
+  async getAllByDistrict(@Param('id', new ParseObjectIdPipe()) id: ObjectId) {
+    return this.participantService.getAllParticipantsByDistrictId(id);
   }
 
   @Get('getAllByDistrict')

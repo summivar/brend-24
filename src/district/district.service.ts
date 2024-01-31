@@ -1,7 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { District } from './schemas';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { EXCEPTION_MESSAGE } from '../constants';
 import { ParticipantService } from '../participant/participant.service';
 import { UsersService } from '../users/users.service';
@@ -14,7 +14,7 @@ export class DistrictService {
   ) {
   }
 
-  async getAllParticipantsIdByDistrictId(id: Types.ObjectId) {
+  async getAllParticipantsIdByDistrictId(id: ObjectId) {
     const district = await this.districtModel.findById(id);
     if (!district) {
       return [];

@@ -41,9 +41,9 @@ export class ParticipantService {
     }
   }
 
-  async getAllParticipantsByDistrictId(id?: Types.ObjectId) {
+  async getAllParticipantsByDistrictId(id?: ObjectId) {
     if (!id) {
-      return []
+      return [];
     }
     const participants = [];
     const participantsId = await this.districtService.getAllParticipantsIdByDistrictId(id);
