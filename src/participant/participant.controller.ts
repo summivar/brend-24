@@ -87,6 +87,12 @@ export class ParticipantController {
     return this.participantService.getAllParticipantsByDistrictId(new Types.ObjectId(id));
   }
 
+  @ApiOperation({ summary: 'Получение участников по district без id' })
+  @Get('getAllByDistrict')
+  async getAllByDistrictWithoutId() {
+    return this.participantService.getAllParticipantsByDistrictId();
+  }
+
   @ApiOperation({ summary: 'Добавление участника' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AdminGuard)
