@@ -41,7 +41,7 @@ export class ParticipantService {
     }
   }
 
-  async getAllParticipantsByDistrictId(id: Types.ObjectId) {
+  async getAllParticipantsByDistrictId(id?: Types.ObjectId) {
     if (!id) {
       return []
     }
