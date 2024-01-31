@@ -38,7 +38,6 @@ export class FileSystemService {
       fs.unlink(realFilePath, (err) => {
         if (err) {
           console.log('Error while deleting: ', err);
-          throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.SOMETHING_GO_WRONG);
         }
       });
       return true;
