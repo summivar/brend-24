@@ -18,7 +18,7 @@ export class ClauseService {
   }
 
   async create(file: Express.Multer.File) {
-    if (!file.buffer) {
+    if (!file?.buffer) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
     }
     const clause = await this.clausModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.CLAUSE_ID });

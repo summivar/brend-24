@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Participant } from './schemas';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { EXCEPTION_MESSAGE } from '../constants';
 import { CreateParticipantDto, EditParticipantDto } from './dtos';
 import { FileSystemService } from '../common/file-system/file-system.service';
@@ -23,7 +23,7 @@ export class ParticipantService {
 
     if (name) {
       const regex = new RegExp(name, 'i');
-      const participantsBySlug = await this.participantModel.find({ nameOfCompany: { $regex: regex } });
+      const participantsBySlug = await this.participantModel.find({nameOfCompany: {$regex: regex}});
       if (!participantsBySlug) {
         throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
       }
@@ -143,7 +143,7 @@ export class ParticipantService {
       participant.description = dto.description;
     }
 
-    if (logo.buffer) {
+    if (logo?.buffer) {
       const newLogoPath = this.fileService.saveFile(logo);
       this.fileService.deleteFile(participant.logoPath);
       participant.logoPath = newLogoPath;
@@ -152,10 +152,14 @@ export class ParticipantService {
     return participant.save();
   }
 
-  async deleteDistrictFromParticipant(idDistrict: Types.ObjectId) {
-    return this.participantModel.findOneAndUpdate({ district: idDistrict }, {
-      district: undefined,
-    });
+  async deleteDistrictFromParticipant(idDistrict: ObjectId) {
+    const participants = await this.participantModel.find({district: idDistrict});
+    if (participants) {
+      for (const participant of participants) {
+        participant.district = null;
+        await participant.save();
+      }
+    }
   }
 
   async deleteAllParticipants() {
@@ -165,8 +169,8 @@ export class ParticipantService {
     }
 
     for (const participant of participants) {
+      await this.districtService.deleteParticipantFromDistrict(participant.district, participant.id);
       this.fileService.deleteFile(participant.logoPath);
-      // await this.districtService.deleteParticipantFromDistrict(participant.district, participant.id);
     }
 
     return this.participantModel.deleteMany();

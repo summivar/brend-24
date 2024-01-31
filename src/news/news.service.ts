@@ -104,7 +104,7 @@ export class NewsService {
       news.newsDate = dto.newsDate;
     }
 
-    if (image.buffer) {
+    if (image?.buffer) {
       const newPhotoPath = this.fileService.saveFile(image);
       this.fileService.deleteFile(news.photoPath);
       news.photoPath = newPhotoPath;

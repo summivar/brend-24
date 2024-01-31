@@ -67,7 +67,7 @@ export class PhotoService {
       photo.photoCaption = dto.photoCaption;
     }
 
-    if (image.buffer) {
+    if (image?.buffer) {
       const newPhotoPath = this.fileService.saveFile(image);
       this.fileService.deleteFile(photo.photoPath);
       photo.photoPath = newPhotoPath;

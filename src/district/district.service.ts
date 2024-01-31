@@ -4,13 +4,12 @@ import { District } from './schemas';
 import { Model, ObjectId } from 'mongoose';
 import { EXCEPTION_MESSAGE } from '../constants';
 import { ParticipantService } from '../participant/participant.service';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class DistrictService {
   constructor(
     @InjectModel(District.name) private districtModel: Model<District>,
-    @Inject(forwardRef(() => UsersService)) private participantService: ParticipantService,
+    @Inject(forwardRef(() => ParticipantService)) private participantService: ParticipantService,
   ) {
   }
 
@@ -82,7 +81,7 @@ export class DistrictService {
     }
 
     for (const district of districts) {
-      await this.participantService.deleteDistrictFromParticipant(district._id);
+      await this.participantService.deleteDistrictFromParticipant(district.id);
     }
 
     return this.districtModel.deleteMany();
@@ -94,20 +93,18 @@ export class DistrictService {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }
 
-    // await this.participantService.deleteDistrictFromParticipant(district._id);
+    await this.participantService.deleteDistrictFromParticipant(district.id);
     return this.districtModel.deleteOne(idDistrict);
   }
 
   async deleteParticipantFromDistrict(idDistrict: ObjectId, idParticipant: ObjectId) {
     const district = await this.districtModel.findById(idDistrict);
-    if (!district) {
-      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
-    }
+    if (district) {
+      if (district.participants && district.participants.includes(idParticipant)) {
+        district.participants = district.participants.filter(participantId => participantId !== idParticipant);
+      }
 
-    if (district.participants && district.participants.includes(idParticipant)) {
-      district.participants = district.participants.filter(participantId => participantId !== idParticipant);
+      return district.save();
     }
-
-    return district.save();
   }
 }

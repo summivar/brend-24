@@ -23,7 +23,7 @@ export class WinnerService {
   }
 
   async create(dto: CreateWinnerDto, file: Express.Multer.File) {
-    if (!file.buffer) {
+    if (!file?.buffer) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
     }
     const filePath = this.fileService.saveFile(file);
@@ -50,7 +50,7 @@ export class WinnerService {
       winner.nameFile = dto.name;
     }
 
-    if (file.buffer) {
+    if (file?.buffer) {
       this.fileService.deleteFile(winner.filePath);
       winner.filePath = this.fileService.saveFile(file);
     }
