@@ -17,7 +17,7 @@ export class DistrictService {
   async getAllParticipantsIdByDistrictId(id: Types.ObjectId) {
     const district = await this.districtModel.findById(id);
     if (!district) {
-      throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
+      return [];
     }
     return district.participants;
   }
