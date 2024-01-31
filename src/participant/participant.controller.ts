@@ -78,7 +78,7 @@ export class ParticipantController {
   @ApiOperation({ summary: 'Получение участников по district' })
   @ApiParam({
     name: 'id',
-    required: true,
+    required: false,
     example: 'ObjectID',
     description: 'ID district',
   })
