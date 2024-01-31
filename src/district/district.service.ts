@@ -94,7 +94,7 @@ export class DistrictService {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND_BY_ID);
     }
 
-    await this.participantService.deleteDistrictFromParticipant(district._id);
+    // await this.participantService.deleteDistrictFromParticipant(district._id);
     return this.districtModel.deleteOne(idDistrict);
   }
 
