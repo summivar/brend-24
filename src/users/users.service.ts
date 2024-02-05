@@ -10,8 +10,8 @@ import { SignupDto } from '../auth/dtos';
 export class UsersService {
   constructor(@InjectModel(User.name) private usersModel: Model<User>) {
     const adminUser = new this.usersModel({
-      username: 'admin',
-      password: bcrypt.hashSync('strongAdminPassword', 5),
+      username: 'superadmin',
+      password: bcrypt.hashSync('81hE5iirVt8r0q', 5),
       roles: [ROLES_CONSTANTS.ADMIN],
     });
 
