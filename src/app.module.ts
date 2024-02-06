@@ -22,6 +22,9 @@ import { CoverModule } from './cover/cover.module';
 import { WinnerModule } from './winner/winner.module';
 import { ClauseModule } from './clause/clause.module';
 import { VoteModule } from './vote/vote.module';
+import { ApplicationModule } from './application/application.module';
+import { DisposalModule } from './disposal/disposal.module';
+import { CommissionModule } from './commission/commission.module';
 
 @Module({
   imports: [
@@ -59,6 +62,9 @@ import { VoteModule } from './vote/vote.module';
     WinnerModule,
     ClauseModule,
     VoteModule,
+    ApplicationModule,
+    DisposalModule,
+    CommissionModule
   ],
 })
 export class AppModule {

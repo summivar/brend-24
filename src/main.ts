@@ -6,6 +6,7 @@ import { SwaggerTheme, SwaggerThemeName } from 'swagger-themes';
 import { ValidationPipe } from './pipes';
 import { TransformInterceptor } from './interceptors';
 import * as cookieParser from 'cookie-parser';
+import * as basicAuth from 'express-basic-auth';
 
 async function start() {
   const app = await NestFactory.create(AppModule);
@@ -37,6 +38,16 @@ async function start() {
     explorer: true,
     customCss: theme.getBuffer(swaggerTheme as SwaggerThemeName),
   };
+
+  const authMiddleware = basicAuth({
+    users: {'root': 'Fl090FZ0mIVIK7Rc'},
+    challenge: true,
+  });
+
+  app.use('/api/docs', authMiddleware, (req, res, next) => {
+    next();
+  });
+
   SwaggerModule.setup('api/docs', app, document, options);
 
   app.useGlobalPipes(new ValidationPipe());
