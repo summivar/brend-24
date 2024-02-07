@@ -15,8 +15,7 @@ export class PhotoService {
   }
 
   async getAll(pageSize?: number, pageNumber?: number) {
-    let query = this.photoModel.find({});
-    query = query.sort([['photoTime', -1]]);
+    let query = this.photoModel.find({}).sort({ createdAt: 'desc' });
 
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
@@ -27,12 +26,12 @@ export class PhotoService {
       query = query.skip(skip).limit(pageSize);
     }
 
+    const allPhotos = await query.exec();
     const totalPhotos = await this.photoModel.countDocuments({});
-    const paginatedPhotos = await query.exec();
 
     return {
       totalPhotos: totalPhotos,
-      photos: paginatedPhotos,
+      photos: allPhotos,
     };
   }
 

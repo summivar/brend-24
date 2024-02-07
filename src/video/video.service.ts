@@ -13,9 +13,7 @@ export class VideoService {
   }
 
   async getAll(pageSize: number, pageNumber: number) {
-    let query = this.videoModel.find({});
-
-    query = query.sort([['videoTime', -1]]);
+    let query = this.videoModel.find({}).sort({ createdAt: 'desc' });
 
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
