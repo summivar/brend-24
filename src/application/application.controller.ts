@@ -36,13 +36,13 @@ export class ApplicationController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
     limits: {
-      fieldSize: FILE_LIMIT.DOCX_SIZE,
+      fieldSize: FILE_LIMIT.PDF_SIZE,
     },
     fileFilter: (req, file, callback) => {
-      if (file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && /\.(docx)$/.test(extname(file.originalname).toLowerCase())) {
+      if (file.mimetype === 'application/pdf' && /\.(pdf)$/.test(extname(file.originalname).toLowerCase())) {
         callback(null, true);
       } else {
-        callback(new ValidationException('Only Microsoft Word files with the extension .docx are allowed.'), false);
+        callback(new ValidationException('Only PDF files with the extension .pdf are allowed.'), false);
       }
     },
   }))
@@ -57,13 +57,13 @@ export class ApplicationController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
     limits: {
-      fieldSize: FILE_LIMIT.DOCX_SIZE,
+      fieldSize: FILE_LIMIT.PDF_SIZE,
     },
     fileFilter: (req, file, callback) => {
-      if (file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && /\.(docx)$/.test(extname(file.originalname).toLowerCase())) {
+      if (file.mimetype === 'application/pdf' && /\.(pdf)$/.test(extname(file.originalname).toLowerCase())) {
         callback(null, true);
       } else {
-        callback(new ValidationException('Only Microsoft Word files with the extension .docx are allowed.'), false);
+        callback(new ValidationException('Only PDF files with the extension .pdf are allowed.'), false);
       }
     },
   }))
@@ -78,13 +78,13 @@ export class ApplicationController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
     limits: {
-      fieldSize: FILE_LIMIT.DOCX_SIZE,
+      fieldSize: FILE_LIMIT.PDF_SIZE,
     },
     fileFilter: (req, file, callback) => {
-      if (file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && /\.(docx)$/.test(extname(file.originalname).toLowerCase())) {
+      if (file.mimetype === 'application/pdf' && /\.(pdf)$/.test(extname(file.originalname).toLowerCase())) {
         callback(null, true);
       } else {
-        callback(new ValidationException('Only Microsoft Word files with the extension .docx are allowed.'), false);
+        callback(new ValidationException('Only PDF files with the extension .pdf are allowed.'), false);
       }
     },
   }))
@@ -99,13 +99,13 @@ export class ApplicationController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
     limits: {
-      fieldSize: FILE_LIMIT.DOCX_SIZE,
+      fieldSize: FILE_LIMIT.PDF_SIZE,
     },
     fileFilter: (req, file, callback) => {
-      if (file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && /\.(docx)$/.test(extname(file.originalname).toLowerCase())) {
+      if (file.mimetype === 'application/pdf' && /\.(pdf)$/.test(extname(file.originalname).toLowerCase())) {
         callback(null, true);
       } else {
-        callback(new ValidationException('Only Microsoft Word files with the extension .docx are allowed.'), false);
+        callback(new ValidationException('Only PDF files with the extension .pdf are allowed.'), false);
       }
     },
   }))
