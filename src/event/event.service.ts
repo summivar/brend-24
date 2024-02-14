@@ -11,8 +11,7 @@ export class EventService {
   }
 
   async getAll(pageSize?: number, pageNumber?: number) {
-    let query = this.eventModel.find({});
-    query = query.sort([['startTime', -1]]);
+    let query = this.eventModel.find({}).sort({ createdAt: 'desc' });
 
     if (pageSize && pageNumber) {
       if (pageSize < 1 || pageNumber < 1) {
@@ -39,8 +38,7 @@ export class EventService {
   async create(dto: CreateEventDto) {
     const event = new this.eventModel({
       name: dto.name,
-      startTime: dto.startTime,
-      endTime: dto.endTime,
+      date: dto.date,
       description: dto.description,
     });
 
@@ -62,12 +60,8 @@ export class EventService {
       event.name = dto.name;
     }
 
-    if (dto.startTime) {
-      event.startTime = dto.startTime;
-    }
-
-    if (dto.endTime) {
-      event.endTime = dto.endTime;
+    if (dto.date) {
+      event.date = dto.date;
     }
 
     if (dto.description) {

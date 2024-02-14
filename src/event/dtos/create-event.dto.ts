@@ -6,19 +6,9 @@ export class CreateEventDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ example: '2024-01-11T11:42:46+0000', description: 'Время начала мероприятия' })
-  @IsDateString({
-    strict: true,
-    strictSeparator: true,
-  })
-  startTime: Date;
-
-  @ApiProperty({ example: '2024-01-11T11:43:15+0000', description: 'Время окончания мероприятия' })
-  @IsDateString({
-    strict: true,
-    strictSeparator: true,
-  })
-  endTime: Date;
+  @ApiProperty({ example: 'Date', description: 'Время начала мероприятия' })
+  @IsString()
+  date: string;
 
   @ApiProperty({ example: 'text', description: 'Описание мероприятия' })
   @IsString()

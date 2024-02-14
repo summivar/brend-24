@@ -11,10 +11,7 @@ export class Event {
   name: string;
 
   @Prop({ required: true })
-  startTime: Date;
-
-  @Prop({ required: true })
-  endTime: Date;
+  date: string;
 
   @Prop({ required: true })
   description: string;
