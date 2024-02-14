@@ -49,13 +49,13 @@ export class ApplicationService {
     if (!file?.buffer) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
     }
-    const lbmo = await this.lbkModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID });
+    const lbmo = await this.lbmoModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID });
     if (lbmo) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
     }
 
     const filePath = this.fileService.saveFile(file, 'lbmo');
-    const newLBMO = new this.lbkModel({
+    const newLBMO = new this.lbmoModel({
       uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID,
       filePath: filePath,
     });
