@@ -15,18 +15,18 @@ export class ApplicationService {
   }
 
   async getLBK() {
-    return this.lbkModel.findOne({uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBK_ID});
+    return this.lbkModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBK_ID });
   }
 
   async getLBMO() {
-    return this.lbmoModel.findOne({uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID});
+    return this.lbmoModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID });
   }
 
   async createLBK(file: Express.Multer.File) {
     if (!file?.buffer) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
     }
-    const lbk = await this.lbkModel.findOne({uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBK_ID});
+    const lbk = await this.lbkModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBK_ID });
     if (lbk) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
     }
@@ -49,7 +49,7 @@ export class ApplicationService {
     if (!file?.buffer) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.INVALID_DATA);
     }
-    const lbmo = await this.lbkModel.findOne({uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID});
+    const lbmo = await this.lbkModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID });
     if (lbmo) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.ALREADY_EXISTS);
     }
@@ -69,7 +69,7 @@ export class ApplicationService {
   }
 
   async editLBK(file: Express.Multer.File) {
-    const lbk = await this.lbkModel.findOne({uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBK_ID});
+    const lbk = await this.lbkModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBK_ID });
     if (!lbk) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
     }
@@ -81,7 +81,7 @@ export class ApplicationService {
   }
 
   async editLBMO(file: Express.Multer.File) {
-    const lbmo = await this.lbmoModel.findOne({uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID});
+    const lbmo = await this.lbmoModel.findOne({ uniqueId: UNIQUAL_ID_CONSTANTS.APPLICATION_LBMO_ID });
     if (!lbmo) {
       throw new BadRequestException(EXCEPTION_MESSAGE.BAD_REQUEST_EXCEPTION.NOT_FOUND);
     }
@@ -90,5 +90,25 @@ export class ApplicationService {
     lbmo.filePath = this.fileService.saveFile(file, 'lbmo');
 
     return lbmo.save();
+  }
+
+  async deleteLBK() {
+    const lbk = await this.lbkModel.find({});
+    if (lbk.length) {
+      for (const value of lbk) {
+        this.fileService.deleteFile(value.filePath);
+      }
+    }
+    return this.lbkModel.deleteMany({});
+  }
+
+  async deleteLBMO() {
+    const lbmo = await this.lbmoModel.find({});
+    if (lbmo.length) {
+      for (const value of lbmo) {
+        this.fileService.deleteFile(value.filePath);
+      }
+    }
+    return this.lbmoModel.deleteMany({});
   }
 }

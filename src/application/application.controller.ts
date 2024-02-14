@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '../auth/guards';
 import {
   CreateApplicationLbkDto,
   CreateApplicationLbmoDto,
   EditApplicationLbkDto,
-  EditApplicationLbmoDto
+  EditApplicationLbmoDto,
 } from './dtos';
 import { ApplicationService } from './application.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -19,19 +19,19 @@ export class ApplicationController {
   constructor(private applicationService: ApplicationService) {
   }
 
-  @ApiOperation({summary: 'Получение формы заявки ЛБК'})
+  @ApiOperation({ summary: 'Получение формы заявки ЛБК' })
   @Get('get/lbk')
   async getLBK() {
     return this.applicationService.getLBK();
   }
 
-  @ApiOperation({summary: 'Получение формы заявки ЛБМО'})
+  @ApiOperation({ summary: 'Получение формы заявки ЛБМО' })
   @Get('get/lbmo')
   async getLBMO() {
     return this.applicationService.getLBMO();
   }
 
-  @ApiOperation({summary: 'Создание формы заявки ЛБК'})
+  @ApiOperation({ summary: 'Создание формы заявки ЛБК' })
   @ApiBearerAuth('JWT-auth')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
@@ -52,7 +52,7 @@ export class ApplicationController {
     return this.applicationService.createLBK(file);
   }
 
-  @ApiOperation({summary: 'Создание формы заявки ЛБМО'})
+  @ApiOperation({ summary: 'Создание формы заявки ЛБМО' })
   @ApiBearerAuth('JWT-auth')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
@@ -73,7 +73,7 @@ export class ApplicationController {
     return this.applicationService.createLBMO(file);
   }
 
-  @ApiOperation({summary: 'Изменение формы заявки ЛБК'})
+  @ApiOperation({ summary: 'Изменение формы заявки ЛБК' })
   @ApiBearerAuth('JWT-auth')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
@@ -94,7 +94,7 @@ export class ApplicationController {
     return this.applicationService.editLBK(file);
   }
 
-  @ApiOperation({summary: 'Изменение формы заявки ЛБМО'})
+  @ApiOperation({ summary: 'Изменение формы заявки ЛБМО' })
   @ApiBearerAuth('JWT-auth')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
@@ -113,5 +113,21 @@ export class ApplicationController {
   @Put('edit/lbmo')
   async editLBMO(@Body() editDto: EditApplicationLbmoDto, @UploadedFile() file: Express.Multer.File) {
     return this.applicationService.editLBMO(file);
+  }
+
+  @ApiOperation({ summary: 'Удаление формы ЛБК' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @Delete('delete/lbk')
+  async deleteLBK() {
+    return this.applicationService.deleteLBK();
+  }
+
+  @ApiOperation({ summary: 'Удаление формы ЛБК' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AdminGuard)
+  @Delete('delete/lbmo')
+  async deleteLBMO() {
+    return this.applicationService.deleteLBMO();
   }
 }
